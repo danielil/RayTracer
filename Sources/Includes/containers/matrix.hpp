@@ -14,7 +14,6 @@ namespace containers
 	{
 	public:
 		using value_type = T;
-		using size_type = std::size_t;
 
 		using inner_container_type = std::vector< value_type >;
 		using outer_container_type = std::vector< inner_container_type >;
@@ -24,12 +23,12 @@ namespace containers
 		using reverse_iterator = typename outer_container_type::reverse_iterator;
 		using const_reverse_iterator = typename outer_container_type::const_reverse_iterator;
 
+		using size_type = typename outer_container_type::size_type;
+
 		matrix::matrix(
 			size_type rows,
 			size_type columns ) noexcept :
-		container( rows, inner_container_type( columns ) ),
-		rows( rows ),
-		columns( columns )
+			container( rows, inner_container_type( columns ) )
 		{
 		}
 
@@ -51,7 +50,7 @@ namespace containers
 			return this->container[row_index];
 		}
 
-		const std::size_t size() const
+		const size_type size() const
 		{
 			return this->container.size();
 		}
@@ -117,7 +116,5 @@ namespace containers
 		}
 	private:
 		outer_container_type container;
-		std::size_t rows = 0;
-		std::size_t columns = 0;
 	};
 }

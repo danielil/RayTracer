@@ -11,107 +11,110 @@
 #include <functional>
 #include <unordered_map>
 
-namespace netpbm
+namespace io
 {
-	enum class format
+	class netpbm
 	{
-		// Portable BitMap
-		pbm,
-		// Portable GrayMap
-		pgm,
-		// Portable PixMap
-		ppm
-	};
-
-	enum class encoding
-	{
-		ascii,
-		binary
-	};
-
-	static const std::unordered_map< format, std::string > format_to_string
-	{
-		{ format::pbm, "pbm" },
-		{ format::pgm, "pgm" },
-		{ format::ppm, "ppm" }
-	};
-
-	static const std::unordered_map<
-		format,
-		std::unordered_map<
-			encoding,
-			unsigned int > > format_to_magic_number = 
-	{
+	public:
+		enum class format
 		{
-			format::pbm,
-			{
-				{ encoding::ascii, 1 },
-				{ encoding::binary, 4 }
-			}
-		},
+			// Portable BitMap
+			pbm,
+			// Portable GrayMap
+			pgm,
+			// Portable PixMap
+			ppm
+		};
+
+		enum class encoding
 		{
-			format::pgm,
-			{
-				{ encoding::ascii, 2 },
-				{ encoding::binary, 5 }
-			}
-		},
+			ascii,
+			binary
+		};
+
+		netpbm(
+			const std::string filename,
+			const format format,
+			const encoding encoding,
+			const std::size_t rows,
+			const std::size_t columns )
 		{
-			format::ppm,
+			this->output = std::ofstream( filename + "." + this->format_to_string.at( format ) );
+			const auto magic_number = this->format_to_magic_number.at( format ).at( encoding );
+
+			this->output << "P" << magic_number << std::endl;
+			this->output << rows << " " << columns << std::endl;
+
+			if ( format != format::pbm )
 			{
-				{ encoding::ascii, 3 },
-				{ encoding::binary, 6 }
+				this->output << static_cast< unsigned int >( image::MAX_CHANNEL_VALUE ) << std::endl;
 			}
 		}
-	};
 
-	std::ofstream
-	get_stream_writer(
-		const std::string filename,
-		const format format,
-		const encoding encoding,
-		const std::size_t rows,
-		const std::size_t columns )
-	{
-		std::ofstream output( filename + "." + format_to_string.at( format ) );
-		const auto magic_number = format_to_magic_number.at( format ).at( encoding );
+		~netpbm() noexcept = default;
 
-		output << "P" << magic_number << std::endl;
-		output << rows << " " << columns << std::endl;
+		netpbm( const netpbm& ) = delete;
+		netpbm( netpbm&& ) noexcept = delete;
 
-		if ( format != format::pbm )
+		netpbm& operator=( const netpbm& ) = delete;
+		netpbm& operator=( netpbm&& ) = delete;
+
+		template< typename T >
+		void
+		write( const image::image< T >& image )
 		{
-			output << static_cast< unsigned int >( image::MAX_CHANNEL_VALUE ) << std::endl;
-		}
-
-		return output;
-	}
-
-	void
-	write_color(
-		const std::string filename,
-		const encoding encoding,
-		const image::rgb_image& image )
-	{
-		auto writer =
-			get_stream_writer(
-				filename,
-				format::ppm,
-				encoding,
-				image.size(),
-				image[0].size() );
-
-		for ( const auto& row : image )
-		{
-			for ( const auto& column : row )
+			for ( const auto& row : image )
 			{
-				for ( std::size_t channel = 0; channel < image::CHANNELS; ++channel )
+				for ( const auto& column : row )
 				{
-					writer << static_cast< unsigned int >( column[channel] ) << " ";
+					for ( const auto& channel : column )
+					{
+						static constexpr auto separator = " ";
+						this->output << static_cast< unsigned int >( channel ) << separator;
+					}
+				}
+
+				this->output << std::endl;
+			}
+		}
+
+	private:
+		std::ofstream output;
+
+		const std::unordered_map< format, std::string > format_to_string
+		{
+			{ format::pbm, "pbm" },
+			{ format::pgm, "pgm" },
+			{ format::ppm, "ppm" }
+		};
+
+		const std::unordered_map<
+			format,
+			std::unordered_map<
+			encoding,
+			unsigned int > > format_to_magic_number =
+		{
+			{
+				format::pbm,
+				{
+					{ encoding::ascii, 1 },
+					{ encoding::binary, 4 }
+				}
+			},
+			{
+				format::pgm,
+				{
+					{ encoding::ascii, 2 },
+					{ encoding::binary, 5 }
+				}
+			},
+			{
+				format::ppm,
+				{
+					{ encoding::ascii, 3 },
+					{ encoding::binary, 6 }
 				}
 			}
-
-			writer << std::endl;
-		}
-	}
+		};
+	};
 }

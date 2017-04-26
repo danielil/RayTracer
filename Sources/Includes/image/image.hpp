@@ -11,20 +11,24 @@
 
 namespace image
 {
-	template< typename T >
-	using image_container = containers::matrix< T >;
-
-	using binary_image = image_container< bool >;
-
 	using channel_type = std::uint8_t;
-	using monochrome_image = image_container< channel_type >;
-
-	static constexpr std::size_t CHANNELS = 3;
-	static constexpr std::size_t RED_CHANNEL = 3;
-	static constexpr std::size_t GREEN_CHANNEL = 3;
-	static constexpr std::size_t BLUE_CHANNEL = 3;
-	using rgb_container = std::array< channel_type, CHANNELS >;
-	using rgb_image = image_container< rgb_container >;
-
 	static constexpr auto MAX_CHANNEL_VALUE = std::numeric_limits< channel_type >::max();
+
+	template< typename T >
+	using image = containers::matrix< T >;
+
+	template < typename T, std::size_t N >
+	using channel_container = std::array< T, N >;
+
+	/**
+	* Type of images.
+	*/
+	using binary_container = channel_container< bool, 1 >;
+	using binary_image = image< binary_container >;
+
+	using monochrome_container = channel_container< channel_type, 1U >;
+	using monochrome_image = image< monochrome_container >;
+
+	using rgb_container = channel_container< channel_type, 3U >;
+	using rgb_image = image< rgb_container >;
 }
