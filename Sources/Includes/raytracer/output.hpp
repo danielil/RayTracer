@@ -8,7 +8,7 @@
 #include "raytracer/raytracer.hpp"
 #include "raytracer/value_mapping.hpp"
 
-#include "utilities/netpbm_writer.hpp"
+#include "utilities/netpbm.hpp"
 
 namespace raytracer
 {

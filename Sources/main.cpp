@@ -4,8 +4,14 @@
  */
 
 #include "raytracer/output.hpp"
+#include "utilities/timer.hpp"
+
+#include <iostream>
 
 int main()
 {
-	raytracer::output_to_file( "output" );
+    std::cout << utilities::time_callback< std::chrono::milliseconds >([]()
+    {
+        raytracer::output_to_file("output");
+    } ).count() << " ticks";
 }
