@@ -11,7 +11,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace io
+namespace utilities
 {
 	class netpbm
 	{
@@ -59,15 +59,15 @@ namespace io
 		netpbm& operator=( const netpbm& ) = delete;
 		netpbm& operator=( netpbm&& ) = delete;
 
-		template< typename T >
+		template< typename Image >
 		void
-		write( const image::image< T >& image )
+		write( Image&& image )
 		{
-			for ( const auto& row : image )
+			for ( auto&& row : image )
 			{
-				for ( const auto& column : row )
+				for ( auto&& column : row )
 				{
-					for ( const auto& channel : column )
+					for ( auto&& channel : column )
 					{
 						static constexpr auto separator = " ";
 						this->output << static_cast< unsigned int >( channel ) << separator;

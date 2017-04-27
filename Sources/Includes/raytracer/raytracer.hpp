@@ -7,32 +7,59 @@
 
 #include "containers/matrix.hpp"
 
+#include "raytracer/alias.hpp"
 #include "raytracer/geometry/ray.hpp"
 #include "raytracer/geometry/sphere.hpp"
 
 namespace raytracer
 {
-	using vector_type = double;
+	using vector_container = containers::matrix< vector_type >;
 
-	containers::matrix< vector_type > compute_render_values( const std::size_t rows, const std::size_t columns )
+	containers::matrix< vector_type > compute_render_values(
+		const vector_container::size_type rows,
+		const vector_container::size_type columns )
 	{
-		const geometry::sphere< vector_type > sphere( geometry::vector< vector_type > { columns / 2.0, rows / 2.0, 50.0 }, 500000 );
-		const geometry::sphere< vector_type > light( geometry::vector< vector_type > { 0, 0, 50 }, 1 );
-
-		containers::matrix< vector_type > elements( rows, columns );
-
-		for ( std::size_t row = 0; row < rows; ++row )
-		{
-			for ( std::size_t column = 0; column < columns; ++column )
+		const geometry::sphere< vector_type > sphere
+		(
+			geometry::spatial_vector< vector_type >
 			{
-				vector_type value = vector_type();
+				columns / 2.0,
+				rows / 2.0,
+				50.0
+			},
+			500000
+		);
 
-				const geometry::ray< vector_type > ray { geometry::vector< vector_type > { double( row ), double( column ), 0 }, geometry::vector< vector_type > { 0, 0, 1 } };
+		const geometry::sphere< vector_type > light
+		(
+			geometry::spatial_vector< vector_type >
+			{
+				0,
+				0,
+				50
+			},
+			1
+		);
+
+		vector_container elements( rows, columns );
+
+		for ( vector_container::size_type row = 0; row < rows; ++row )
+		{
+			for ( vector_container::size_type column = 0; column < columns; ++column )
+			{
+				auto value = vector_type();
+
+				const geometry::ray< vector_type > ray
+				{
+					geometry::spatial_vector< vector_type > { vector_type( row ), vector_type( column ), 0 },
+					geometry::spatial_vector< vector_type > { 0, 0, 1 }
+				};
+				
 				if ( auto center_ray = sphere.intersect( ray ) )
 				{
-					const geometry::vector< vector_type > vector_from_intersection = ray.origin + ray.direction * *center_ray;
-					geometry::vector< vector_type > light_from_intersection = light.center - vector_from_intersection;
-					geometry::vector< vector_type > sphere_normal = sphere.normal( vector_from_intersection );
+					const geometry::spatial_vector< vector_type > vector_from_intersection = ray.origin + ray.direction * *center_ray;
+					geometry::spatial_vector< vector_type > light_from_intersection = light.center - vector_from_intersection;
+					geometry::spatial_vector< vector_type > sphere_normal = sphere.normal( vector_from_intersection );
 
 					geometry::normalize( std::begin( light_from_intersection ), std::end( light_from_intersection ) );
 

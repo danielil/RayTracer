@@ -20,18 +20,19 @@ namespace raytracer
 		image::rgb_image image( rows, columns );
 		const auto render_values = raytracer::compute_render_values( rows, columns );
 
-		for ( std::size_t row = 0; row < rows; ++row )
+		for ( image::rgb_image::size_type row = 0; row < rows; ++row )
 		{
-			for ( std::size_t column = 0; column < columns; ++column )
-			{
-				image[row][column] = raytracer::value_mapping::color_map_render_value( render_values[row][column] );
-			}
+			std::transform(
+				std::cbegin( render_values[row] ),
+				std::cend( render_values[row] ),
+				std::begin( image[row] ),
+				raytracer::value_map::color_map );
 		}
 
-		io::netpbm(
+		utilities::netpbm(
 			output,
-			io::netpbm::format::ppm,
-			io::netpbm::encoding::ascii,
+			utilities::netpbm::format::ppm,
+			utilities::netpbm::encoding::ascii,
 			rows,
 			columns ).write( image );
 	}

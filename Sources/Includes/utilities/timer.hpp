@@ -10,13 +10,13 @@
 
 namespace utilities
 {
-    template < typename Duration >
-    Duration time_callback( std::function< void() >&& callback )
-    {
-        const auto start = std::chrono::high_resolution_clock::now();
+	template < typename Duration >
+	Duration get_timed_callback( std::function< void() >&& callback )
+	{
+		using clock_type = std::chrono::high_resolution_clock;
 
-        callback();
-
-        return std::chrono::duration_cast< Duration >( std::chrono::high_resolution_clock::now() - start );
-    }
+		const auto start = clock_type::now();
+		callback();
+		return std::chrono::duration_cast< Duration >( clock_type::now() - start );
+	}
 }

@@ -72,12 +72,12 @@ namespace containers
 
 		iterator end()
 		{
-			return std::cend( this->container );
+			return std::end( this->container );
 		}
 
 		const_iterator end() const
 		{
-			return std::cend( this->container );
+			return std::end( this->container );
 		}
 
 		const_iterator cend() const
@@ -97,23 +97,24 @@ namespace containers
 
 		const_iterator crbegin() const
 		{
-			return std::rbegin( this->container );
+			return std::crbegin( this->container );
 		}
 
 		iterator rend()
 		{
-			return std::crend( this->container );
+			return std::rend( this->container );
 		}
 
 		const_iterator rend() const
 		{
-			return std::crend( this->container );
+			return std::rend( this->container );
 		}
 
 		const_iterator crend() const
 		{
 			return std::crend( this->container );
 		}
+
 	private:
 		outer_container_type container;
 	};

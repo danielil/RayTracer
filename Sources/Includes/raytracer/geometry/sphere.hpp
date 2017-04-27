@@ -14,14 +14,14 @@ namespace raytracer::geometry
 	template< typename T >
 	struct sphere
 	{
-		template< typename Vector >
-		sphere( Vector&& center, T radius ) :
-			center( std::forward< Vector >( center ) ),
+		template< typename SpatialVector >
+		sphere( SpatialVector&& center, T radius ) :
+			center( std::forward< SpatialVector >( center ) ),
 			radius( radius )
 		{
 		}
 
-		vector< T > normal( const vector< T >& pi ) const
+		spatial_vector< T > normal( const spatial_vector< T >& pi ) const
 		{
 			auto normal = ( pi - center ) / radius;
 
@@ -78,7 +78,7 @@ namespace raytracer::geometry
 			return center_ray;
 		}
 
-		vector< T > center;
+		spatial_vector< T > center;
 		T radius;
 	};
 }

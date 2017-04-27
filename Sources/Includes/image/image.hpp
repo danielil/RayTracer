@@ -12,6 +12,7 @@
 namespace image
 {
 	using channel_type = std::uint8_t;
+	static constexpr auto MIN_CHANNEL_VALUE = std::numeric_limits< channel_type >::min();
 	static constexpr auto MAX_CHANNEL_VALUE = std::numeric_limits< channel_type >::max();
 
 	template< typename T >

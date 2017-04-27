@@ -10,8 +10,8 @@
 
 int main()
 {
-    std::cout << utilities::time_callback< std::chrono::milliseconds >([]()
-    {
-        raytracer::output_to_file("output");
-    } ).count() << " ticks";
+	std::cout << utilities::get_timed_callback< std::chrono::milliseconds >([]()
+	{
+		raytracer::output_to_file("output");
+	} ).count() << " ticks";
 }

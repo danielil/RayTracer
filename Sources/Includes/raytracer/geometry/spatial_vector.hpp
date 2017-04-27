@@ -12,7 +12,7 @@
 namespace raytracer::geometry
 {
 	template< typename T >
-	using vector = std::valarray< T >;
+	using spatial_vector = std::valarray< T >;
 
 	template< typename Iterator >
 		void normalize(
