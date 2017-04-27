@@ -15,7 +15,9 @@ namespace raytracer::geometry
 	struct sphere
 	{
 		template< typename SpatialVector >
-		sphere( SpatialVector&& center, T radius ) :
+		sphere(
+			SpatialVector&& center,
+			T radius ) :
 			center( std::forward< SpatialVector >( center ) ),
 			radius( radius )
 		{
