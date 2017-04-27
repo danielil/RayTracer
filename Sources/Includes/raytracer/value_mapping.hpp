@@ -21,9 +21,9 @@ namespace raytracer::value_map
 			image::rgb_container { 0, 0, 0 } :
 			image::rgb_container
 		{
+			static_cast< image::channel_type >( std::clamp( 128 * render_value, min, max ) ),
 			static_cast< image::channel_type >( std::clamp( max * render_value, min, max ) ),
-			static_cast< image::channel_type >( std::clamp( max * render_value, min, max ) ),
-			static_cast< image::channel_type >( std::clamp( max + max * render_value, min, max ) )
+			static_cast< image::channel_type >( std::clamp( 128 + max * render_value, min, max ) )
 		};
 	}
 }

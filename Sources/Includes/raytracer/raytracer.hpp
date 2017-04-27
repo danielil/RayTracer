@@ -40,17 +40,7 @@ namespace raytracer
 		const vector_container::size_type columns )
 	{
 		const auto spheres = generate_spheres();
-
-		const geometry::sphere< vector_type > light
-		(
-			geometry::spatial_vector< vector_type >
-			{
-				0,
-				0,
-				50
-			},
-			1
-		);
+		const geometry::spatial_vector< vector_type > light { rows / 2.0, columns / 2.0, 100.0 };
 
 		vector_container elements( rows, columns );
 
@@ -71,7 +61,7 @@ namespace raytracer
 					if ( auto center_ray = sphere.intersect( ray ) )
 					{
 						const geometry::spatial_vector< vector_type > vector_from_intersection = ray.origin + ray.direction * *center_ray;
-						geometry::spatial_vector< vector_type > light_from_intersection = light.center - vector_from_intersection;
+						geometry::spatial_vector< vector_type > light_from_intersection = light - vector_from_intersection;
 						geometry::spatial_vector< vector_type > sphere_normal = sphere.normal( vector_from_intersection );
 
 						geometry::normalize( std::begin( light_from_intersection ), std::end( light_from_intersection ) );
