@@ -5,6 +5,8 @@ A basic CPU RayTracer written in C++.
 
 Screenshot
 ================
+Output image showing how light is traced and intersected by spheres at different locations.
+
 ![Output Screenshot](Resources/output_image.jpg)
 
 About
