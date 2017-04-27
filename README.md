@@ -5,7 +5,7 @@ A basic CPU RayTracer written in C++.
 
 Screenshot
 ================
-![Output Screenshot](Resources/output)
+![Output Screenshot](Resources/output.jpg)
 
 About
 ------------------
