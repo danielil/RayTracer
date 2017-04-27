@@ -24,7 +24,13 @@ namespace raytracer
 		return
 		{
 			{ geometry::spatial_vector< vector_type > { RADIUS, RADIUS, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER },
+			{ geometry::spatial_vector< vector_type > { RADIUS * 2, RADIUS, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER },
+			{ geometry::spatial_vector< vector_type > { RADIUS * 3, RADIUS, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER },
+			{ geometry::spatial_vector< vector_type > { RADIUS, RADIUS * 2, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER },
 			{ geometry::spatial_vector< vector_type > { RADIUS * 2, RADIUS * 2, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER },
+			{ geometry::spatial_vector< vector_type > { RADIUS * 3, RADIUS * 2, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER },
+			{ geometry::spatial_vector< vector_type > { RADIUS, RADIUS * 3, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER },
+			{ geometry::spatial_vector< vector_type > { RADIUS * 2, RADIUS * 3, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER },
 			{ geometry::spatial_vector< vector_type > { RADIUS * 3, RADIUS * 3, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER }
 		};
 	}
