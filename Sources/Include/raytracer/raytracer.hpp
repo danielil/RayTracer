@@ -7,7 +7,10 @@
 
 #include "container/matrix.hpp"
 
+#include "image/image.hpp"
+
 #include "raytracer/alias.hpp"
+#include "raytracer/value_mapping.hpp"
 #include "raytracer/geometry/ray.hpp"
 #include "raytracer/geometry/spatial_vector.hpp"
 #include "raytracer/geometry/object/object.hpp"
@@ -17,10 +20,10 @@
 
 namespace raytracer
 {
-	using vector_container = container::matrix< vector_type >;
+	using vector_container = image::rgb_image;
 	using object_container = std::vector< std::unique_ptr< geometry::object::object > >;
 
-	vector_container compute_render_values(
+	vector_container generate_image(
 		const vector_container::size_type rows,
 		const vector_container::size_type columns,
 		const object_container& objects )
@@ -59,7 +62,7 @@ namespace raytracer
 								vector_type() );
 					}
 
-					elements[row][column] = value;
+					elements[row][column] = value_map::color_map( object->get_channels(), value );
 				}
 			}
 		}

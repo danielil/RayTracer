@@ -10,8 +10,11 @@
 
 int main()
 {
-	std::cout << utility::get_timed_callback< std::chrono::milliseconds >([]()
+	constexpr std::size_t rows = 2000;
+	constexpr std::size_t columns = 2000;
+
+	std::cout << utility::get_timed_callback< std::chrono::milliseconds >([=]()
 	{
-		raytracer::output_to_file("output");
+		raytracer::output_to_file( rows, columns, "output" );
 	} ).count() << " ticks";
 }

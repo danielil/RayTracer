@@ -85,8 +85,15 @@ namespace raytracer::geometry::object
 			return center_ray;
 		}
 
+		const image::rgb_container& get_channels() const override
+		{
+			return this->channels;
+		}
+
 	private:
 		spatial_vector center;
 		vector_type radius;
+
+		image::rgb_container channels { 139, 0, 139 };
 	};
 }

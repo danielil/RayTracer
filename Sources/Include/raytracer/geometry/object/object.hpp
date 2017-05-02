@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "image/image.hpp"
+
 #include "raytracer/alias.hpp"
 
 #include <optional>
@@ -18,5 +20,7 @@ namespace raytracer::geometry::object
 
 		virtual spatial_vector normal( const spatial_vector& pi ) const = 0;
 		virtual std::optional< vector_type > intersect( const ray& ray ) const = 0;
+
+		virtual const image::rgb_container& get_channels() const = 0;
 	};
 }
