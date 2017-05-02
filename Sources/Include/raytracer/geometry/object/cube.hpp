@@ -7,7 +7,7 @@
 
 #include "raytracer/geometry/ray.hpp"
 
-namespace raytracer::geometry
+namespace raytracer::geometry::object
 {
 	template< typename T >
 	struct cube

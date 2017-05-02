@@ -9,10 +9,9 @@
 
 namespace raytracer::geometry
 {
-	template< typename T >
 	struct ray
 	{
-		spatial_vector< T > origin;
-		spatial_vector< T > direction;
+		spatial_vector origin;
+		spatial_vector direction;
 	};
 }

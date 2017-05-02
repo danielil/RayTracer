@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace containers
+namespace container
 {
 	template< typename T >
 	class matrix

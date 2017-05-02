@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "containers/matrix.hpp"
+#include "container/matrix.hpp"
 
 #include <array>
 
@@ -16,14 +16,14 @@ namespace image
 	static constexpr auto MAX_CHANNEL_VALUE = std::numeric_limits< channel_type >::max();
 
 	template< typename T >
-	using image = containers::matrix< T >;
+	using image = container::matrix< T >;
 
 	template < typename T, std::size_t N >
 	using channel_container = std::array< T, N >;
 
 	/**
-	* Type of images.
-	*/
+	 * Type of images.
+	 */
 	using binary_container = channel_container< bool, 1 >;
 	using binary_image = image< binary_container >;
 

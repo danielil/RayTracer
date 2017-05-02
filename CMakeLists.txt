@@ -13,7 +13,7 @@ add_executable(
 	${SOURCE_DIRECTORY}/main.cpp )
 
 # Include the source headers
-set( SOURCE_HEADERS Sources/Includes )
+set( SOURCE_HEADERS Sources/Include )
 target_include_directories(
 	${EXECUTABLE_NAME}
 	PRIVATE

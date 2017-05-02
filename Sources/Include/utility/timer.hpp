@@ -8,7 +8,7 @@
 #include <chrono>
 #include <functional>
 
-namespace utilities
+namespace utility
 {
 	template < typename Duration >
 	Duration get_timed_callback( std::function< void() >&& callback )

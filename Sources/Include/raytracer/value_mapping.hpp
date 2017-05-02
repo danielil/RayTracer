@@ -9,6 +9,8 @@
 
 #include "image/image.hpp"
 
+#include <algorithm>
+
 namespace raytracer::value_map
 {
 	image::rgb_container color_map( raytracer::vector_type render_value )

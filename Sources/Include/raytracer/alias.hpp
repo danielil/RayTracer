@@ -5,6 +5,9 @@
 
 #pragma once
 
+#include <vector>
+#include <memory>
+
 namespace raytracer
 {
 	using vector_type = double;

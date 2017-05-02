@@ -5,25 +5,30 @@
 
 #pragma once
 
+#include "raytracer/alias.hpp"
+#include "raytracer/geometry/ray.hpp"
 #include "raytracer/geometry/spatial_vector.hpp"
+#include "raytracer/geometry/object/object.hpp"
 
 #include <optional>
 
-namespace raytracer::geometry
+namespace raytracer::geometry::object
 {
-	template< typename T >
-	struct sphere
+	class sphere : public object
 	{
+	public:
+		~sphere() noexcept override = default;
+
 		template< typename SpatialVector >
 		sphere(
 			SpatialVector&& center,
-			T radius ) :
+			vector_type radius ) :
 			center( std::forward< SpatialVector >( center ) ),
 			radius( radius )
 		{
 		}
 
-		spatial_vector< T > normal( const spatial_vector< T >& pi ) const
+		spatial_vector normal( const spatial_vector& pi ) const override
 		{
 			auto normal = ( pi - center ) / radius;
 
@@ -35,22 +40,22 @@ namespace raytracer::geometry
 		/**
 		 * Heavily inspired by https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 		 */
-		std::optional< double > intersect( const ray< T >& ray ) const
+		std::optional< vector_type > intersect( const ray& ray ) const override
 		{
 			auto vector_between_origin_and_center = center - ray.origin;
 
-			const double normal_coefficient =
+			const auto normal_coefficient =
 				std::inner_product(
 					std::begin( vector_between_origin_and_center ),
 					std::end( vector_between_origin_and_center ),
 					std::begin( ray.direction ),
-					T() );
-			const double distance_squared =
+					vector_type() );
+			const auto distance_squared =
 				std::inner_product(
 					std::begin( vector_between_origin_and_center ),
 					std::end( vector_between_origin_and_center ),
 					std::begin( vector_between_origin_and_center ),
-					T() ) - normal_coefficient * normal_coefficient;
+					vector_type() ) - normal_coefficient * normal_coefficient;
 
 			if ( distance_squared > radius )
 			{
@@ -80,7 +85,8 @@ namespace raytracer::geometry
 			return center_ray;
 		}
 
-		spatial_vector< T > center;
-		T radius;
+	private:
+		spatial_vector center;
+		vector_type radius;
 	};
 }

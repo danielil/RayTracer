@@ -5,14 +5,15 @@
 
 #pragma once
 
+#include "raytracer/alias.hpp"
+
 #include <algorithm>
 #include <numeric>
 #include <valarray>
 
 namespace raytracer::geometry
 {
-	template< typename T >
-	using spatial_vector = std::valarray< T >;
+	using spatial_vector = std::valarray< vector_type >;
 
 	template< typename Iterator >
 		void normalize(

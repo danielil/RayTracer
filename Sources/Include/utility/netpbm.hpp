@@ -11,11 +11,13 @@
 #include <functional>
 #include <unordered_map>
 
-namespace utilities
+namespace utility
 {
 	class netpbm
 	{
 	public:
+		using textual_type = unsigned int;
+
 		enum class format
 		{
 			// Portable BitMap
@@ -47,7 +49,7 @@ namespace utilities
 
 			if ( format != format::pbm )
 			{
-				this->output << static_cast< unsigned int >( image::MAX_CHANNEL_VALUE ) << std::endl;
+				this->output << static_cast< textual_type >( image::MAX_CHANNEL_VALUE ) << std::endl;
 			}
 		}
 
@@ -59,9 +61,9 @@ namespace utilities
 		netpbm& operator=( const netpbm& ) = delete;
 		netpbm& operator=( netpbm&& ) = delete;
 
-		template< typename Image >
+		template< typename T >
 		void
-		write( Image&& image )
+		write( const image::image< T >& image )
 		{
 			for ( auto&& row : image )
 			{
@@ -70,7 +72,7 @@ namespace utilities
 					for ( auto&& channel : column )
 					{
 						static constexpr auto separator = " ";
-						this->output << static_cast< unsigned int >( channel ) << separator;
+						this->output << static_cast< textual_type >( channel ) << separator;
 					}
 				}
 
@@ -92,7 +94,7 @@ namespace utilities
 			format,
 			std::unordered_map<
 			encoding,
-			unsigned int > > format_to_magic_number =
+			std::size_t > > format_to_magic_number =
 		{
 			{
 				format::pbm,
