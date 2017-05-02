@@ -21,14 +21,14 @@
 namespace raytracer
 {
 	using vector_container = image::rgb_image;
-	using object_container = std::vector< std::unique_ptr< geometry::object::object > >;
+	using object_container = std::vector< std::shared_ptr< geometry::object::object > >;
 
 	vector_container generate_image(
 		const vector_container::size_type rows,
 		const vector_container::size_type columns,
 		const object_container& objects )
 	{
-		const geometry::spatial_vector light { rows / 2.0, columns / 2.0, 100.0 };
+		const geometry::spatial_vector light { rows / 2.0, columns / 2.0, 600.0 };
 
 		vector_container elements( rows, columns );
 
@@ -60,9 +60,15 @@ namespace raytracer
 								std::end( light_from_intersection ),
 								std::begin( normal ),
 								vector_type() );
-					}
 
-					elements[row][column] = value_map::color_map( object->get_channels(), value );
+						elements[row][column] = value_map::color_map( object->get_channels(), value );
+
+						break;
+					}
+					else
+					{
+						elements[row][column] = { 0, 0, 0 };
+					}
 				}
 			}
 		}

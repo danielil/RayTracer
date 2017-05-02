@@ -25,15 +25,51 @@ namespace raytracer
 
 		object_container container;
 
-		container.emplace_back( std::move( std::make_unique< geometry::object::sphere >( geometry::spatial_vector { RADIUS, RADIUS, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER ) ) );
-		container.emplace_back( std::move( std::make_unique< geometry::object::sphere >( geometry::spatial_vector { RADIUS * 2, RADIUS, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER ) ) );
-		container.emplace_back( std::move( std::make_unique< geometry::object::sphere >( geometry::spatial_vector { RADIUS * 3, RADIUS, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER ) ) );
-		container.emplace_back( std::move( std::make_unique< geometry::object::sphere >( geometry::spatial_vector { RADIUS, RADIUS * 2, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER ) ) );
-		container.emplace_back( std::move( std::make_unique< geometry::object::sphere >( geometry::spatial_vector { RADIUS * 2, RADIUS * 2, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER ) ) );
-		container.emplace_back( std::move( std::make_unique< geometry::object::sphere >( geometry::spatial_vector { RADIUS * 3, RADIUS * 2, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER ) ) );
-		container.emplace_back( std::move( std::make_unique< geometry::object::sphere >( geometry::spatial_vector { RADIUS, RADIUS * 3, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER ) ) );
-		container.emplace_back( std::move( std::make_unique< geometry::object::sphere >( geometry::spatial_vector { RADIUS * 2, RADIUS * 3, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER ) ) );
-		container.emplace_back( std::move( std::make_unique< geometry::object::sphere >( geometry::spatial_vector { RADIUS * 3, RADIUS * 3, RADIUS / MULTIPLIER }, RADIUS * MULTIPLIER ) ) );
+		container.emplace_back(
+			std::make_shared< geometry::object::sphere >(
+				geometry::spatial_vector { RADIUS, RADIUS, RADIUS / MULTIPLIER },
+				RADIUS * MULTIPLIER,
+				image::rgb_container { 139, 0, 139 } ) );
+		container.emplace_back(
+			std::make_shared< geometry::object::sphere >(
+				geometry::spatial_vector { RADIUS * 2, RADIUS, RADIUS / MULTIPLIER },
+				RADIUS * MULTIPLIER,
+				image::rgb_container { 38, 84, 124 } ) );
+		container.emplace_back(
+			std::make_shared< geometry::object::sphere >(
+				geometry::spatial_vector { RADIUS * 3, RADIUS, RADIUS / MULTIPLIER },
+				RADIUS * MULTIPLIER,
+				image::rgb_container { 239, 71, 111 } ) );
+		container.emplace_back(
+			std::make_shared< geometry::object::sphere >(
+				geometry::spatial_vector { RADIUS, RADIUS * 2, RADIUS / MULTIPLIER },
+				RADIUS * MULTIPLIER,
+				image::rgb_container { 255, 209, 102 } ) );
+		container.emplace_back(
+			std::make_shared< geometry::object::sphere >(
+				geometry::spatial_vector { RADIUS * 2, RADIUS * 2, RADIUS / MULTIPLIER },
+				RADIUS * MULTIPLIER,
+				image::rgb_container { 0, 178, 202 } ) );
+		container.emplace_back(
+			std::make_shared< geometry::object::sphere >(
+				geometry::spatial_vector { RADIUS * 3, RADIUS * 2, RADIUS / MULTIPLIER },
+				RADIUS * MULTIPLIER,
+				image::rgb_container { 239, 71, 111 } ) );
+		container.emplace_back(
+			std::make_shared< geometry::object::sphere >(
+				geometry::spatial_vector { RADIUS, RADIUS * 3, RADIUS / MULTIPLIER },
+				RADIUS * MULTIPLIER,
+				image::rgb_container { 255, 209, 102 } ) );
+		container.emplace_back(
+			std::make_shared< geometry::object::sphere >(
+				geometry::spatial_vector { RADIUS * 2, RADIUS * 3, RADIUS / MULTIPLIER },
+				RADIUS * MULTIPLIER,
+				image::rgb_container { 38, 84, 124 } ) );
+		container.emplace_back(
+			std::make_shared< geometry::object::sphere >(
+				geometry::spatial_vector { RADIUS * 3, RADIUS * 3, RADIUS / MULTIPLIER },
+				RADIUS * MULTIPLIER,
+				image::rgb_container { 139, 0, 139 } ) );
 
 		return container;
 	}

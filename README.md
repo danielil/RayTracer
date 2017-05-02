@@ -5,9 +5,13 @@ A basic CPU RayTracer written in C++.
 
 Screenshot
 ================
-Output image showing how light is traced and intersected by spheres at different locations (radially outwards).
+Output image showing how light is traced and intersected by spheres of different colors at different locations (radially outwards).
 
 ![Output Screenshot](Resources/output.jpg)
+
+Output image showing similar setup with point light in top right corner.
+
+![Output Screenshot](Resources/output_angled.jpg)
 
 About
 ------------------

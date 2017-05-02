@@ -22,9 +22,11 @@ namespace raytracer::geometry::object
 		template< typename SpatialVector >
 		sphere(
 			SpatialVector&& center,
-			vector_type radius ) :
+			vector_type radius,
+			image::rgb_container channels ) :
 			center( std::forward< SpatialVector >( center ) ),
-			radius( radius )
+			radius( radius ),
+			channels( channels )
 		{
 		}
 
@@ -93,7 +95,6 @@ namespace raytracer::geometry::object
 	private:
 		spatial_vector center;
 		vector_type radius;
-
-		image::rgb_container channels { 139, 0, 139 };
+		image::rgb_container channels;
 	};
 }
