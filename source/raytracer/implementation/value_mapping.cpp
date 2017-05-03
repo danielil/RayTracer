@@ -3,13 +3,7 @@
  * MIT License (MIT), http://opensource.org/licenses/MIT
  */
 
-#pragma once
-
-#include "raytracer/alias.hpp"
-
-#include "image/image.hpp"
-
-#include <algorithm>
+#include "raytracer/value_mapping.hpp"
 
 namespace raytracer::value_map
 {

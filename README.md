@@ -1,40 +1,56 @@
 RayTracer
 ================
+A basic CPU RayTracer written in modern C++.
 
-A basic CPU RayTracer written in C++.
+About
+------------------
+Author: `Daniel Sebastian Iliescu, http://dansil.net`  
+License: `MIT License (MIT), http://opensource.org/licenses/MIT`  
+
+Dependencies
+------------------
+<table>
+  <tr>
+    <th>Type</th>
+    <th>Dependency</th>
+  </tr>
+  <tr>
+    <td>Unit Testing</td>
+    <td>Catch</td>
+  </tr>
+  <tr>
+    <td>Contiguously allocated multidimensional container (TODO/Matrix refactor)</td>
+    <td>Boost.MultiArray</td>
+  </tr>
+  <tr>
+    <td>JSON Parsing (TODO/Scene File)</td>
+    <td>Boost.PropertyTree</td>
+  </tr>
+</table>
+
+Requirements
+------------------
+C++17 conforming compiler.
 
 Screenshot
 ================
 Output image showing how light is traced and intersected by spheres of different colors at different locations (radially outwards).
 
-![Output Screenshot](Resources/output.jpg)
+<img src="documentation/images/output.jpg" alt="Output SCreenshot" width="500">
 
 Output image showing similar setup with point light in top right corner.
 
-![Output Screenshot](Resources/output_angled.jpg)
-
-About
-------------------
-
-Author: `Daniel Sebastian Iliescu, http://dansil.net`  
-License: `MIT License (MIT), http://opensource.org/licenses/MIT`  
-
-Requirements
-------------------
-
-C++17 conforming compiler.
+<img src="documentation/images/output_angled.jpg" alt="Output SCreenshot" width="500">
 
 Limitations
 ------------------
-
-This software RayTracer is entirely educational. It is inaccurate with respect to physical dimensions and not optimized. This is very basic groundwork meant to be improved upon. It is in no way a complete solution. Rendering is CPU-based.
+This software RayTracer is entirely educational. It is currently inaccurate and unoptimized.
 
 TODO
 ------------------
-Proper input-based scene files should be added to be parsed by the application. This also means adding support for additional objects.
-
-Drop-in multithreading should improve the performance significantly (either through std::thread or OpenMP). I am waiting for a complete implementation of the C++17 execution policies for use with standard algorithms (http://en.cppreference.com/w/cpp/algorithm/execution_policy_tag_t) to avoid deploying my own threading model. Some of the std::transform calls should hopefully be able to make use of these.
-
-Offloading some of the computation to the GPU is also something that I want to get to eventually.
-
-Implemented as a quick proof of concept, the matrix class unfortunately uses two levels of pointer indirection. That is, it contains a collection of nested containers of heap allocated data. As a result, the buffer is not contiguous in memory and destroys the cache line. This class should be updated to only use a single level of indirection and indexing should occur linearly. Ideally, a templatized approach for an n-dimensional (tensor) container would be even better.
+<ul>
+  <li>Input-based scene files as well as support for additional objects and materials.</li>
+  <li>Proper multithreading support to significantly improve performance (e.g. std::thread, OpenMP, etc. ). Ideally the C++17 execution policies (http://en.cppreference.com/w/cpp/algorithm/execution_policy_tag_t) would be used to avoid deploying my own threading model.</li>
+  <li>GPU RayTracer support.</li>
+  <li>Proper matrix/tensor/multidimensional container allocated contiguously and indexed linearly. The current matrix class uses two levels of pointer indirection. That is, it contains a collection of nested containers of heap allocated data. As a result, the buffer is not contiguous in memory and destroys the cache line.</li>
+</ul>

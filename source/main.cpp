@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-int main()
+int main( /* int argc, char** argv */ )
 {
 	constexpr std::size_t rows = 2000;
 	constexpr std::size_t columns = 2000;

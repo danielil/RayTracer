@@ -3,18 +3,7 @@
  * MIT License (MIT), http://opensource.org/licenses/MIT
  */
 
-#pragma once
-
-#include "raytracer/alias.hpp"
-#include "raytracer/raytracer.hpp"
-#include "raytracer/geometry/spatial_vector.hpp"
-#include "raytracer/geometry/object/object.hpp"
-#include "raytracer/geometry/object/sphere.hpp"
-
-#include "utility/netpbm.hpp"
-
-#include <memory>
-#include <vector>
+#include "raytracer/output.hpp"
 
 namespace raytracer
 {
