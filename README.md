@@ -50,7 +50,8 @@ TODO
 ------------------
 <ul>
   <li>Input-based scene files as well as support for additional objects and materials.</li>
-  <li>QT-based GUI</li>
   <li>Proper multithreading support to significantly improve performance (e.g. std::thread, OpenMP, etc. ). Ideally the C++17 execution policies (http://en.cppreference.com/w/cpp/algorithm/execution_policy_tag_t) would be used to avoid deploying my own threading model.</li>
   <li>Proper matrix/tensor/multidimensional container allocated contiguously and indexed linearly. The current matrix class uses two levels of pointer indirection. That is, it contains a collection of nested containers of heap allocated data. As a result, the buffer is not contiguous in memory and destroys the cache line.</li>
+  <li>QT-based GUI</li>
+  <li>Add consistent class-level and function-level comments. Consider Doxygen.</li>
 </ul>
