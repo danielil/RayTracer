@@ -76,11 +76,11 @@ namespace raytracer
 						//
 						// The projection of the intersection normal towards the object normal will
 						// yield greater values as both vectors become more similarly directed.
-						// As these vector directions become less similarly directed, the dot product
-						// of these two vectors will yield a lower value. In other cases, the angle between
-						// both vectors yill be greater than 90 degrees and lower than 270, placing them
-						// in opposite directions. This will yield a negative dot product due to the cosine
-						// of such an angle, which returns a negative value.
+						// As these vectors become less similarly directed, the dot product of these
+						// two vectors will yield a lower value. In other cases, the angle between both
+						// vectors yill be greater than 90 degrees and lower than 270 degrees, placing
+						// them in opposite directions. This will yield a negative dot product due to the
+						// cosine of such an angle, which returns a negative value.
 
 						const auto value =
 							std::inner_product(
@@ -91,7 +91,7 @@ namespace raytracer
 
 						// Color mapping is performed on the intensity of the projection computed. Color mapping returns
 						// a value linearly proportional to the intensity value. At peak intensity, the pixel reflects
-						// the objects maximal color value. This color value decreases (darkens) proportionally to the
+						// the object's maximal color value. This color value decreases (darkens) proportionally to the
 						// computed intensity. No color is mapped for negative intensity values, resulting in a black pixel.
 						elements[row][column] = value_mapping::color_map( object->get_color(), value );
 
