@@ -24,28 +24,13 @@
 #pragma once
 
 #include "raytracer/alias.hpp"
-#include "raytracer/raytracer.hpp"
-#include "raytracer/geometry/spatial_vector.hpp"
-#include "raytracer/geometry/object/object.hpp"
-#include "raytracer/geometry/object/sphere.hpp"
 
-#include "utility/netpbm.hpp"
+#include <valarray>
 
-#include <memory>
-#include <vector>
-
-namespace raytracer
+namespace raytracer::geometry
 {
 	/**
-	 * Generates the scene elements.
+	 * Structure that defines a point.
 	 */
-	object_container generate_spheres();
-
-	/**
-	 * Outputs the scene to a file.
-	 */
-	void output_to_file(
-		const std::size_t rows,
-		const std::size_t columns,
-		const std::string output );
+	using point = std::valarray< vector_type >;
 }

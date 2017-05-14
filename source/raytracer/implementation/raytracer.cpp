@@ -30,7 +30,8 @@ namespace raytracer
 		const vector_container::size_type columns,
 		const object_container& objects )
 	{
-		const geometry::spatial_vector light { rows / 2.0, columns / 2.0, 600.0 };
+		// Currently only a single point light source is supported.
+		const geometry::point light { vector_type( rows / 2.0 ), vector_type( columns / 2.0 ), vector_type( 600.0 ) };
 
 		vector_container elements( rows, columns );
 
@@ -38,39 +39,66 @@ namespace raytracer
 		{
 			for ( vector_container::size_type column = 0; column < columns; ++column )
 			{
-				auto value = vector_type();
-
+				// The current ray's origin is always associated with the current row and column scanned.
 				const geometry::ray ray
 				{
-					geometry::spatial_vector { vector_type( row ), vector_type( column ), 0 },
-					geometry::spatial_vector { 0, 0, 1 }
+					geometry::point { vector_type( row ), vector_type( column ), vector_type() },
+					geometry::spatial_vector { vector_type(), vector_type(), vector_type( 1 ) }
 				};
 				
+				// Compute the intersection of the ray for every object in the scene.
+				// The trace algorithm does not currently support multiple intersecting objects
+				// and performs early exit on the first object intersected.
 				for ( const auto& object : objects )
 				{
-					if ( auto center_ray = object->intersect( ray ) )
+					// Compute the intersection point of the ray with the object.
+					// Color is mapped for the current pixel only if the ray intersects the object.
+					// Otherwise, the pixel is rendered black.
+					if ( auto intersection_point = object->intersect( ray ) )
 					{
-						const auto vector_from_intersection = ray.origin + ray.direction * center_ray.value();
-						auto light_from_intersection = light - vector_from_intersection;
-						auto normal = object->normal( vector_from_intersection );
+						// Normal (towards light) at the intersection point
+						//
+						// Intersection Normal (Vector) = Light (Point) - Intersection (Point)
+						// Point - Point -> Vector
+						auto intersection_normal_towards_light = light - intersection_point.value();
 
-						geometry::normalize( std::begin( light_from_intersection ), std::end( light_from_intersection ) );
+						// Compute the normal (vector) of the object given an intersection point.
+						// The normal of the object returned is a unit vector for use in the dot
+						// product with the normal intersection towards the point light.
+						auto object_normal = object->normal( intersection_point.value() );
 
-						value =
+						// The normal intersection towards the point light also needs to be a unit vector
+						// for use in the dot product calculation.
+						geometry::normalize( std::begin( intersection_normal_towards_light ), std::end( intersection_normal_towards_light ) );
+
+						// The value computed is that of the dot product between the normal of the object
+						// and the normal at the intersection point towards the point light.
+						//
+						// The projection of the intersection normal towards the object normal will
+						// yield greater values as both vectors become more similarly directed.
+						// As these vector directions become less similarly directed, the dot product
+						// of these two vectors will yield a lower value. In other cases, the angle between
+						// both vectors yill be greater than 90 degrees and lower than 270, placing them
+						// in opposite directions. This will yield a negative dot product due to the cosine
+						// of such an angle, which returns a negative value.
+
+						const auto value =
 							std::inner_product(
-								std::begin( light_from_intersection ),
-								std::end( light_from_intersection ),
-								std::begin( normal ),
+								std::cbegin( intersection_normal_towards_light ),
+								std::cend( intersection_normal_towards_light ),
+								std::cbegin( object_normal ),
 								vector_type() );
 
-						elements[row][column] = value_map::color_map( object->get_channels(), value );
+						// Color mapping is performed on the intensity of the projection computed. Color mapping returns
+						// a value linearly proportional to the intensity value. At peak intensity, the pixel reflects
+						// the objects maximal color value. This color value decreases (darkens) proportionally to the
+						// computed intensity. No color is mapped for negative intensity values, resulting in a black pixel.
+						elements[row][column] = value_mapping::color_map( object->get_color(), value );
 
 						break;
 					}
-					else
-					{
-						elements[row][column] = { 0, 0, 0 };
-					}
+
+					elements[row][column] = { 0, 0, 0 };
 				}
 			}
 		}

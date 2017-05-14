@@ -32,33 +32,43 @@
 
 namespace raytracer::geometry::object
 {
+	/**
+	 * Defines a sphere.
+	 */
 	class sphere : public object
 	{
 	public:
 		~sphere() noexcept override = default;
 
-		template< typename SpatialVector >
+		template< typename Point >
 		sphere(
-			SpatialVector&& center,
+			Point&& center,
 			vector_type radius,
 			image::rgb_container channels ) :
-			center( std::forward< SpatialVector >( center ) ),
+			center( std::forward< Point >( center ) ),
 			radius( radius ),
 			channels( channels )
 		{
 		}
 
-		spatial_vector normal( const spatial_vector& pi ) const override;
-
 		/**
+		 * Returns the intersection point of the ray with the sphere.
 		 * Heavily inspired by https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 		 */
-		std::optional< vector_type > intersect( const ray& ray ) const override;
+		std::optional< point > intersect( const ray& ray ) const override;
 
-		const image::rgb_container& get_channels() const override;
+		/**
+		 * Returns the normal vector of the sphere given an intersection point.
+		 */
+		spatial_vector normal( const point& intersection_point ) const override;
+
+		/*
+		 * Returns the sphere's color.
+		 */
+		const image::rgb_container& get_color() const override;
 
 	private:
-		spatial_vector center;
+		point center;
 		vector_type radius;
 		image::rgb_container channels;
 	};

@@ -38,9 +38,15 @@
 
 namespace raytracer
 {
+	// Container for the representation of the output.
 	using vector_container = image::rgb_image;
+
+	// Container for the scene elements.
 	using object_container = std::vector< std::shared_ptr< geometry::object::object > >;
 
+	/**
+	 * Returns the raytracer's generated output.
+	 */
 	vector_container generate_image(
 		const vector_container::size_type rows,
 		const vector_container::size_type columns,

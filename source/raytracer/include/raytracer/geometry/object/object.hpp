@@ -36,9 +36,19 @@ namespace raytracer::geometry::object
 	public:
 		virtual ~object() noexcept = default;
 
-		virtual spatial_vector normal( const spatial_vector& pi ) const = 0;
-		virtual std::optional< vector_type > intersect( const ray& ray ) const = 0;
+		/**
+		 * Returns the intersection point of the ray with the object.
+		 */
+		virtual std::optional< point > intersect( const ray& ray ) const = 0;
 
-		virtual const image::rgb_container& get_channels() const = 0;
+		/**
+		 * Returns the normal vector of the object given an intersection point.
+		 */
+		virtual spatial_vector normal( const point& intersection_point ) const = 0;
+
+		/*
+		 * Returns the object's color.
+		 */
+		virtual const image::rgb_container& get_color() const = 0;
 	};
 }

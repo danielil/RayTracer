@@ -25,19 +25,10 @@
 
 namespace raytracer::geometry::object
 {
-	spatial_vector sphere::normal( const spatial_vector& pi ) const
-	{
-		auto normal = ( pi - center ) / radius;
-
-		normalize( std::begin( normal ), std::end( normal ) );
-
-		return normal;
-	}
-
 	/**
-		* Heavily inspired by https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
-		*/
-	std::optional< vector_type > sphere::intersect( const ray& ray ) const
+	 * Heavily inspired by https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
+	 */
+	std::optional< point > sphere::intersect( const ray& ray ) const
 	{
 		auto vector_between_origin_and_center = center - ray.origin;
 
@@ -79,10 +70,27 @@ namespace raytracer::geometry::object
 			}
 		}
 
-		return center_ray;
+		// The intersection point is computed by adding the ray origin to the ray direction
+		// multiplied by a scalar representing the z coordinate of the intersection.
+		// 
+		// Intersection (Point) = Ray Origin (Point) + Ray Direction (Vector) * Center Ray (Scalar)
+		// Point + Vector * Scalar -> Point + Vector -> Point
+		return ray.origin + ray.direction * center_ray;
 	}
 
-	const image::rgb_container& sphere::get_channels() const
+	spatial_vector sphere::normal( const point& intersection_point ) const
+	{
+		// The normal of a sphere is simply calculated by subtracting its center
+		// from any intersection point. However, this result will still need
+		// to be normalized.
+		auto normal = intersection_point - center;
+
+		normalize( std::begin( normal ), std::end( normal ) );
+
+		return normal;
+	}
+
+	const image::rgb_container& sphere::get_color() const
 	{
 		return this->channels;
 	}

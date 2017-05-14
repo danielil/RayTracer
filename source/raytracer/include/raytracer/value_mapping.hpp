@@ -27,11 +27,16 @@
 
 #include "image/image.hpp"
 
-#include <algorithm>
-
-namespace raytracer::value_map
+namespace raytracer::value_mapping
 {
+	/**
+	 * Returns a color given an input color and a projection value.
+	 *
+	 * The color returned simply describes a linear relationship
+	 * between projection values and color, as every channel is multiplied
+	 * by the same projection value.
+	 */
 	image::rgb_container color_map(
 		image::rgb_container channels,
-		raytracer::vector_type render_value );
+		vector_type projection_value );
 }

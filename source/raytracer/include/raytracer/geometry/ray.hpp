@@ -23,13 +23,17 @@
 
 #pragma once
 
+#include "raytracer/geometry/point.hpp"
 #include "raytracer/geometry/spatial_vector.hpp"
 
 namespace raytracer::geometry
 {
+	/**
+	 * Structure that defines a point.
+	 */
 	struct ray
 	{
-		spatial_vector origin;
+		point origin;
 		spatial_vector direction;
 	};
 }

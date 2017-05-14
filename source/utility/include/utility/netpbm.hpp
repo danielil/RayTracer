@@ -31,6 +31,9 @@
 
 namespace utility
 {
+	/**
+	 * Utility class responsible for outputting netpbm formatted files.
+	 */
 	class netpbm
 	{
 	public:

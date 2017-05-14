@@ -31,8 +31,12 @@
 
 namespace raytracer::geometry
 {
+	// Vector object used for Euclidean geometry.
 	using spatial_vector = std::valarray< vector_type >;
 
+	/**
+	 * Normalizes a vector into a unit vector (vector of length 1).
+	 */
 	template< typename Iterator >
 		void normalize(
 			Iterator begin,
@@ -40,16 +44,18 @@ namespace raytracer::geometry
 	{
 		using value_type = std::iterator_traits< Iterator >::value_type;
 
-		value_type root_sum_squared =
+		// Computes the norm (magnitude) of the vector.
+		value_type norm =
 			std::sqrt(
 				std::accumulate( begin, end, value_type(), []( const value_type& left, const value_type& right )
 				{
 					return left + right * right;
 				} ) );
 
-		std::transform( begin, end, begin, [&root_sum_squared]( value_type element )
+		// Normalizes the vector with the norm.
+		std::transform( begin, end, begin, [&norm]( value_type element )
 		{
-			return element / root_sum_squared;
+			return element / norm;
 		} );
 	}
 }
