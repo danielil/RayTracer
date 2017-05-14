@@ -45,9 +45,9 @@ namespace raytracer::geometry::object
 			return {};
 		}
 
-		// Given the camera and ray vectors, we can visualize a triangle and compute the length of the hypotenuse. This
-		// length will represent the distance between the center of the sphere and the reach of the ray direction
-		// vector, which will be a point.
+		// Given the camera and ray vectors, we can visualize a triangle and compute the hypotenuse. This length will
+		// represent the distance between the center of the sphere and the reach of the ray direction vector, which
+		// will be a point.
 		//
 		// Hypotenuse (Scalar) =
 		//	origin_to_center (Vector) * origin_to_center (Vector) -

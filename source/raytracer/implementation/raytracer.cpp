@@ -35,7 +35,10 @@ namespace raytracer
 
 		vector_container elements( rows, columns );
 
-		for ( vector_container::size_type row = 0; row < rows; ++row )
+		// TODO: Use vector_container::size_type instead of int
+		// Signed type required for OpenMP version bundled with MSVC.
+		#pragma omp parallel for
+		for ( auto row = 0; row < static_cast< int >( rows ); ++row )
 		{
 			for ( vector_container::size_type column = 0; column < columns; ++column )
 			{
