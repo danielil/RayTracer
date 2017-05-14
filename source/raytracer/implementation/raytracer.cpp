@@ -54,7 +54,7 @@ namespace raytracer
 					// Compute the intersection point of the ray with the object.
 					// Color is mapped for the current pixel only if the ray intersects the object.
 					// Otherwise, the pixel is rendered black.
-					if ( auto intersection_point = object->intersect( ray ) )
+					if ( const auto intersection_point = object->intersect( ray ) )
 					{
 						// Normal (towards light) at the intersection point
 						//
@@ -81,7 +81,6 @@ namespace raytracer
 						// vectors will be greater than 90 degrees and lower than 270 degrees, placing
 						// them in opposite directions. This will yield a negative dot product due to the
 						// cosine of such an angle, which returns a negative value.
-
 						const auto value =
 							std::inner_product(
 								std::cbegin( intersection_normal_towards_light ),
