@@ -78,7 +78,7 @@ namespace raytracer
 						// yield greater values as both vectors become more similarly directed.
 						// As these vectors become less similarly directed, the dot product of these
 						// two vectors will yield a lower value. In other cases, the angle between both
-						// vectors yill be greater than 90 degrees and lower than 270 degrees, placing
+						// vectors will be greater than 90 degrees and lower than 270 degrees, placing
 						// them in opposite directions. This will yield a negative dot product due to the
 						// cosine of such an angle, which returns a negative value.
 
