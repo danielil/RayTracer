@@ -37,9 +37,14 @@
 namespace raytracer
 {
 	/**
-	 * Generates the scene elements.
+	 * Generates the scene lighting elements.
 	 */
-	object_container generate_spheres();
+	illumination_container generate_illumination();
+
+	/**
+	 * Generates the scene object elements.
+	 */
+	object_container generate_objects();
 
 	/**
 	 * Outputs the scene to a file.

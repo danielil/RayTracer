@@ -12,6 +12,7 @@ Features
 <ul>
   <li>Basic multithreading support with OpenMP.</li>
   <li>Basic color mapping given object intrinsic color.</li>
+  <li>Supports multiple objects and multiple point light sources</li>
 </ul>
 
 Requirements
@@ -34,11 +35,11 @@ Dependencies
     <td>Boost.Test</td>
   </tr>
   <tr>
-    <td>Contiguously allocated multidimensional container (TODO: Matrix refactor)</td>
+    <td>Contiguously allocated multidimensional container (ToDo: Matrix refactor)</td>
     <td>Boost.MultiArray</td>
   </tr>
   <tr>
-    <td>JSON Parsing (TODO: Scene File)</td>
+    <td>JSON Parsing (ToDo: Scene File)</td>
     <td>Boost.PropertyTree</td>
   </tr>
 </table>
@@ -53,10 +54,11 @@ Output image showing similar setup with point light in top right corner.
 
 <img src="documentation/images/output_angled.jpg" alt="Output SCreenshot" width="500">
 
-TODO
+Limitations/ToDo
 ------------------
 <ul>
   <li>Input-based scene files as well as support for additional objects and materials.</li>
+  <li>Multiple object intersections is not supported. The RayTracer will simply render the first object intersected, even if there is an object behind it. This is a direct consequence of the RayTracer not being recursive. This should change in the near future.
   <li>Add material support in addition to object color. Make color derived from material rather than object and specify material color reflectance efficiency.</li>
   <li>Refactor the OpenMP usage with the C++17 execution policies (http://en.cppreference.com/w/cpp/algorithm/execution_policy_tag_t) when they become available.</li>
   <li>Proper matrix/tensor/multidimensional container allocated contiguously and indexed linearly. The current matrix class uses two levels of pointer indirection. That is, it contains a collection of nested containers of heap allocated data. As a result, the buffer is not contiguous in memory and destroys the cache line.</li>

@@ -25,6 +25,15 @@
 
 namespace raytracer
 {
+	illumination_container generate_illumination()
+	{
+		illumination_container illuminations;
+
+		illuminations.emplace_back( std::initializer_list< vector_type >{ 1000, 1000, 600.0 } );
+
+		return illuminations;
+	}
+
 	object_container generate_spheres()
 	{
 		static constexpr vector_type RADIUS = 250;
@@ -94,6 +103,7 @@ namespace raytracer
 				generate_image(
 					rows,
 					columns,
+					generate_illumination(),
 					generate_spheres() ) );
 	}
 }
