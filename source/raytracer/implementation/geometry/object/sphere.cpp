@@ -25,64 +25,101 @@
 
 namespace raytracer::geometry::object
 {
-	/**
-	 * Heavily inspired by https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
-	 */
 	std::optional< point > sphere::intersect( const ray& ray ) const
 	{
-		auto vector_between_origin_and_center = center - ray.origin;
+		// Vector between the center of the sphere and the origin of the ray.
+		auto origin_to_center_vector = this->center - ray.origin;
 
-		const auto normal_coefficient =
+		// Dot product between the direction of the ray and the origin to center vector.
+		const auto camera_ray_projection =
 			std::inner_product(
-				std::begin( vector_between_origin_and_center ),
-				std::end( vector_between_origin_and_center ),
+				std::begin( origin_to_center_vector ),
+				std::end( origin_to_center_vector ),
 				std::begin( ray.direction ),
 				vector_type() );
-		const auto distance_squared =
-			std::inner_product(
-				std::begin( vector_between_origin_and_center ),
-				std::end( vector_between_origin_and_center ),
-				std::begin( vector_between_origin_and_center ),
-				vector_type() ) - normal_coefficient * normal_coefficient;
 
-		if ( distance_squared > radius )
+		// Early return if camera ray projection is negative. In this case, the dot product returns a negative value,
+		// meaning both vectors are in opposite directions.
+		if ( camera_ray_projection < vector_type() )
 		{
 			return {};
 		}
 
-		const auto normal_coefficient_within_sphere = std::sqrt( radius - distance_squared );
+		// Given the camera and ray vectors, we can visualize a triangle and compute the length of the hypotenuse. This
+		// length will represent the distance between the center of the sphere and the reach of the ray direction
+		// vector, which will be a point.
+		//
+		// Hypotenuse (Scalar) =
+		//	origin_to_center (Vector) * origin_to_center (Vector) -
+		//	camera_ray_projection (Scalar) * camera_ray_projection (Scalar);
+		//
+		// Vector * Vector - Scalar * Scalar -> Scalar - Scalar -> Scalar
+		//
+		// An optimization is possible since we never actually need the hypothenuse directly. We can always use the
+		// hypothenuse squared.
+		const auto hypotenuse_squared = 
+			std::inner_product(
+				std::begin( origin_to_center_vector ),
+				std::end( origin_to_center_vector ),
+				std::begin( origin_to_center_vector ),
+				vector_type() ) -
+			camera_ray_projection * camera_ray_projection;
 
-		auto center_ray = normal_coefficient - normal_coefficient_within_sphere;
-		auto passthrough_ray = normal_coefficient + normal_coefficient_within_sphere;
-
-		if ( center_ray > passthrough_ray )
+		// If the computed hypotenuse is within the sphere, the value will be equal to or lower than the radius of the
+		// sphere. If the value is greater than the radius of the sphere, we know that the ray direction vector did not
+		// intersect the sphere.
+		//
+		// Since we are using the hypotenuse squared, it must be compared to the radius squared.
+		const auto radius_squared = this->radius * this->radius;
+		if ( hypotenuse_squared > radius_squared )
 		{
-			std::swap( passthrough_ray, center_ray );
+			return {};
 		}
 
-		if ( center_ray < 0 )
-		{
-			center_ray = passthrough_ray;
+		// The half length between points is half the length between the intersecting point entering the sphere or the
+		// one exiting the sphere. This value will be added or substracted to the camera ray projection to retrieve the
+		// distance from the ray origin to either points.
+		const auto half_length_between_points = std::sqrt( radius_squared - hypotenuse_squared );
 
-			if ( center_ray < 0 )
+		// The distance between the ray origin and the intersection point entering the sphere is equivalent to the
+		// difference between the camera ray projection and the half length between the two points.
+		auto entering_intersection_distance = camera_ray_projection - half_length_between_points;
+
+		// The distance between the ray origin and the intersection point entering the sphere is equivalent to the
+		// addition of the camera ray projection and the half length between the two points.
+		auto exiting_intersection_distance = camera_ray_projection + half_length_between_points;
+
+		// The entering intersection distance cannot be greater than the exiting intersection distance.
+		if ( entering_intersection_distance > exiting_intersection_distance )
+		{
+			std::swap( exiting_intersection_distance, entering_intersection_distance );
+		}
+
+		// If the entering intersection point is negative, we want to try to use the exiting intersection point.
+		if ( entering_intersection_distance < vector_type() )
+		{
+			entering_intersection_distance = exiting_intersection_distance;
+
+			// Both the entering and exiting intersection points are negative, so we don't have a solution for the
+			// intersection of this ray with the sphere.
+			if ( entering_intersection_distance < vector_type() )
 			{
 				return {};
 			}
 		}
 
-		// The intersection point is computed by adding the ray origin to the ray direction
-		// multiplied by a scalar representing the z coordinate of the intersection.
+		// The intersection point is computed by adding the ray origin to the ray direction multiplied by a scalar
+		// representing the z-coordinate of the intersection.
 		// 
 		// Intersection (Point) = Ray Origin (Point) + Ray Direction (Vector) * Center Ray (Scalar)
 		// Point + Vector * Scalar -> Point + Vector -> Point
-		return ray.origin + ray.direction * center_ray;
+		return ray.origin + ray.direction * entering_intersection_distance;
 	}
 
 	spatial_vector sphere::normal( const point& intersection_point ) const
 	{
-		// The normal of a sphere is simply calculated by subtracting its center
-		// from any intersection point. However, this result will still need
-		// to be normalized.
+		// The normal of a sphere is simply calculated by subtracting its center from any intersection point. However,
+		// this result will still need to be normalized.
 		auto normal = intersection_point - center;
 
 		normalize( std::begin( normal ), std::end( normal ) );

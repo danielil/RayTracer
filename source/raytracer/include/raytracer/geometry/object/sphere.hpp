@@ -52,7 +52,7 @@ namespace raytracer::geometry::object
 		}
 
 		/**
-		 * Returns the intersection point of the ray with the sphere.
+		 * Returns the intersection point of the ray with the sphere using a geometric solution.
 		 * Heavily inspired by https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 		 */
 		std::optional< point > intersect( const ray& ray ) const override;

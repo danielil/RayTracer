@@ -46,14 +46,13 @@ namespace raytracer
 					geometry::spatial_vector { vector_type(), vector_type(), vector_type( 1 ) }
 				};
 				
-				// Compute the intersection of the ray for every object in the scene.
-				// The trace algorithm does not currently support multiple intersecting objects
-				// and performs early exit on the first object intersected.
+				// Compute the intersection of the ray for every object in the scene. The trace algorithm does not
+				// currently support multiple intersecting objects and performs early exit on the first object
+				// intersected.
 				for ( const auto& object : objects )
 				{
-					// Compute the intersection point of the ray with the object.
-					// Color is mapped for the current pixel only if the ray intersects the object.
-					// Otherwise, the pixel is rendered black.
+					// Compute the intersection point of the ray with the object. Color is mapped for the current pixel
+					// only if the ray intersects the object. Otherwise, the pixel is rendered black.
 					if ( const auto intersection_point = object->intersect( ray ) )
 					{
 						// Normal (towards light) at the intersection point
@@ -62,25 +61,24 @@ namespace raytracer
 						// Point - Point -> Vector
 						auto intersection_normal_towards_light = light - intersection_point.value();
 
-						// Compute the normal (vector) of the object given an intersection point.
-						// The normal of the object returned is a unit vector for use in the dot
-						// product with the normal intersection towards the point light.
+						// Compute the normal (vector) of the object given an intersection point. The normal of the
+						// object returned is a unit vector for use in the dot product with the normal intersection
+						// towards the point light.
 						auto object_normal = object->normal( intersection_point.value() );
 
-						// The normal intersection towards the point light also needs to be a unit vector
-						// for use in the dot product calculation.
+						// The normal intersection towards the point light also needs to be a unit vector for use in
+						// the dot product calculation.
 						geometry::normalize( std::begin( intersection_normal_towards_light ), std::end( intersection_normal_towards_light ) );
 
-						// The value computed is that of the dot product between the normal of the object
-						// and the normal at the intersection point towards the point light.
+						// The value computed is that of the dot product between the normal of the object and the
+						// normal at the intersection point towards the point light.
 						//
-						// The projection of the intersection normal towards the object normal will
-						// yield greater values as both vectors become more similarly directed.
-						// As these vectors become less similarly directed, the dot product of these
-						// two vectors will yield a lower value. In other cases, the angle between both
-						// vectors will be greater than 90 degrees and lower than 270 degrees, placing
-						// them in opposite directions. This will yield a negative dot product due to the
-						// cosine of such an angle, which returns a negative value.
+						// The projection of the intersection normal towards the object normal will yield greater
+						// values as both vectors become more similarly directed. As these vectors become less
+						// similarly directed, the dot product of these two vectors will yield a lower value. In other
+						// cases, the angle between both vectors will be greater than 90 degrees and lower than 270
+						// degrees, placing them in opposite directions. This will yield a negative dot product due to
+						// the cosine of such an angle, which returns a negative value.
 						const auto value =
 							std::inner_product(
 								std::cbegin( intersection_normal_towards_light ),
