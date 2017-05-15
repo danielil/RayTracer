@@ -23,9 +23,6 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
-
 namespace raytracer
 {
 	// Type for use as underlying render values.

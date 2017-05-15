@@ -23,36 +23,33 @@
 
 #pragma once
 
-#include "container/matrix.hpp"
-
 #include "image/image.hpp"
 
-#include "raytracer/alias.hpp"
-#include "raytracer/value_mapping.hpp"
-#include "raytracer/geometry/ray.hpp"
-#include "raytracer/geometry/spatial_vector.hpp"
-#include "raytracer/geometry/object/object.hpp"
-
-#include <memory>
-#include <vector>
+#include "raytracer/scene.hpp"
 
 namespace raytracer
 {
-	// Container for the representation of the output.
-	using vector_container = image::rgb_image;
-
-	// Container for the light sources.
-	using illumination_container = std::vector< geometry::point >;
-
-	// Container for the scene elements.
-	using object_container = std::vector< std::shared_ptr< geometry::object::object > >;
-
 	/**
-	 * Returns the raytracer's generated output.
+	 * Class responsible for rendering the scene to a buffer.
 	 */
-	vector_container generate_image(
-		const vector_container::size_type rows,
-		const vector_container::size_type columns,
-		const illumination_container& lights,
-		const object_container& objects );
+	class render
+	{
+	public:
+		// Container for the representation of the output.
+		using container_type = image::rgb_image;
+
+		render() = default;
+		~render() noexcept = default;
+
+		render( const render& ) = default;
+		render( render&& ) noexcept = default;
+
+		render& operator=( const render& ) = default;
+		render& operator=( render&& ) noexcept = default;
+
+		/**
+		 * Generates the traced output.
+		 */
+		container_type trace( const scene& scene );
+	};
 }

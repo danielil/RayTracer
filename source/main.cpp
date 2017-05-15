@@ -21,18 +21,74 @@
  * SOFTWARE.
  */
 
-#include "raytracer/output.hpp"
+#include "raytracer/scene.hpp"
+#include "raytracer/raytracer.hpp"
+
 #include "utility/timer.hpp"
+#include "utility/netpbm.hpp"
+
+#include <boost/program_options.hpp>
 
 #include <iostream>
 
-int main( /* int argc, char** argv */ )
+int main( int argc, char** argv )
 {
-	constexpr std::size_t rows = 2000;
-	constexpr std::size_t columns = 2000;
+	boost::program_options::options_description description( "Allowed options" );
+	description.add_options()
+		( "help", "List all available arguments" )
+		( "scene", boost::program_options::value< std::string >(), "Path to scene file" )
+		( "output", boost::program_options::value< std::string >(), "Output filename" );
 
-	std::cout << utility::get_timed_callback< std::chrono::milliseconds >([=]()
+	boost::program_options::variables_map variables_map;
+	boost::program_options::store( boost::program_options::parse_command_line( argc, argv, description ), variables_map );
+	boost::program_options::notify( variables_map );
+
+	if ( variables_map.count( "help" ) )
 	{
-		raytracer::output_to_file( rows, columns, "output" );
+		std::cout << description << std::endl;
+
+		return EXIT_SUCCESS;
+	}
+
+	if ( variables_map.count( "scene" ) )
+	{
+		std::cout << "Scene file was set to "
+			<< variables_map["scene"].as< std::string >() << "." << std::endl;
+	}
+	else
+	{
+		std::cout << "Scene file was not specified." << std::endl;
+
+		return EXIT_FAILURE;
+	}
+
+	if ( variables_map.count( "output" ) )
+	{
+		std::cout << "Output filename was set to "
+			<< variables_map["output"].as< std::string >() << "." << std::endl;
+	}
+	else
+	{
+		std::cout << "Output filename was not specified." << std::endl;
+
+		return EXIT_FAILURE;
+	}
+
+	raytracer::scene scene( variables_map["scene"].as< std::string >() );
+
+	const auto& metadata = scene.get_metadata();
+
+	std::cout << utility::get_timed_callback< std::chrono::milliseconds >( [&variables_map, &scene, &metadata]()
+	{
+		utility::netpbm(
+			variables_map["output"].as< std::string >(),
+			utility::netpbm::format::ppm,
+			utility::netpbm::encoding::ascii,
+			metadata.rows,
+			metadata.columns ).write(
+				raytracer::render().trace(
+					scene ) );
 	} ).count() << " ticks";
+
+	return EXIT_SUCCESS;
 }

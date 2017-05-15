@@ -25,7 +25,9 @@
 
 #include "image/image.hpp"
 
-#include "raytracer/alias.hpp"
+#include "raytracer/geometry/point.hpp"
+#include "raytracer/geometry/ray.hpp"
+#include "raytracer/geometry/spatial_vector.hpp"
 
 #include <optional>
 

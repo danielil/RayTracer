@@ -23,22 +23,25 @@
 
 #include "raytracer/raytracer.hpp"
 
+#include "raytracer/geometry/ray.hpp"
+#include "raytracer/geometry/spatial_vector.hpp"
+
+#include "raytracer/value_mapping.hpp"
+
 namespace raytracer
 {
-	vector_container generate_image(
-		const vector_container::size_type rows,
-		const vector_container::size_type columns,
-		const illumination_container& illuminations,
-		const object_container& objects )
+	render::container_type render::trace( const scene& scene )
 	{
-		vector_container elements( rows, columns );
+		const auto metadata = scene.get_metadata();
+
+		container_type elements( metadata.rows, metadata.columns );
 
 		// TODO: Use vector_container::size_type instead of int
 		// Signed type required for OpenMP version bundled with MSVC.
 		#pragma omp parallel for
-		for ( auto row = 0; row < static_cast< int >( rows ); ++row )
+		for ( auto row = 0; row < static_cast< int >( metadata.rows ); ++row )
 		{
-			for ( vector_container::size_type column = 0; column < columns; ++column )
+			for ( container_type::size_type column = 0; column < metadata.columns; ++column )
 			{
 				// The current ray's origin is always associated with the current row and column scanned.
 				const geometry::ray ray
@@ -50,7 +53,7 @@ namespace raytracer
 				// Compute the intersection of the ray for every object in the scene. The trace algorithm does not
 				// currently support multiple intersecting objects and performs early exit on the first object
 				// intersected.
-				for ( const auto& object : objects )
+				for ( const auto& object : scene.get_objects() )
 				{
 					// Compute the intersection point of the ray with the object. Color is mapped for the current pixel
 					// only if the ray intersects the object. Otherwise, the pixel is rendered black.
@@ -60,7 +63,7 @@ namespace raytracer
 						std::vector< vector_type > projections;
 
 						// Calculate the illumination unto an object given every possible illumination in the scene.
-						for ( const auto& illumination : illuminations )
+						for ( const auto& illumination : scene.get_illuminations() )
 						{
 							// Normal (towards light) at the intersection point
 							//

@@ -12,7 +12,7 @@ add_executable(
 	${EXECUTABLE_NAME}
 	${SOURCE_DIRECTORY}/main.cpp
 	${SOURCE_DIRECTORY}/utility/implementation/netpbm.cpp
-	${SOURCE_DIRECTORY}/raytracer/implementation/output.cpp
+	${SOURCE_DIRECTORY}/raytracer/implementation/scene.cpp
 	${SOURCE_DIRECTORY}/raytracer/implementation/raytracer.cpp
 	${SOURCE_DIRECTORY}/raytracer/implementation/value_mapping.cpp
 	${SOURCE_DIRECTORY}/raytracer/implementation/geometry/object/sphere.cpp )

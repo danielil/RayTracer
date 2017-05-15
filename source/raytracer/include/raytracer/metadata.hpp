@@ -23,34 +23,16 @@
 
 #pragma once
 
-#include "raytracer/alias.hpp"
-#include "raytracer/raytracer.hpp"
-#include "raytracer/geometry/spatial_vector.hpp"
-#include "raytracer/geometry/object/object.hpp"
-#include "raytracer/geometry/object/sphere.hpp"
-
-#include "utility/netpbm.hpp"
-
-#include <memory>
-#include <vector>
-
 namespace raytracer
 {
 	/**
-	 * Generates the scene lighting elements.
+	 * Structure containing information about scene metadata.
 	 */
-	illumination_container generate_illumination();
+	struct metadata
+	{
+		using size_type = size_t;
 
-	/**
-	 * Generates the scene object elements.
-	 */
-	object_container generate_objects();
-
-	/**
-	 * Outputs the scene to a file.
-	 */
-	void output_to_file(
-		const std::size_t rows,
-		const std::size_t columns,
-		const std::string output );
+		size_type rows;
+		size_type columns;
+	};
 }
