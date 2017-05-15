@@ -12,13 +12,14 @@ Features
 <ul>
   <li>Basic multithreading support with OpenMP.</li>
   <li>Basic color mapping given object intrinsic color.</li>
-  <li>Supports multiple objects and multiple point light sources</li>
-  <li>Uses a scene file (JSON format) to render elements at runtime</li>
+  <li>Supports multiple objects and multiple point light sources.</li>
+  <li>Uses a scene file (JSON format) to dynamically render elements at runtime.</li>
 </ul>
 
 Usage
 ------------------
 	./RayTracer --scene path_to_scene.json --output output_filename
+	./RayTracer --help
 
 Requirements
 ------------------
