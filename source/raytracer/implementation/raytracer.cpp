@@ -26,7 +26,7 @@
 #include "raytracer/geometry/ray.hpp"
 #include "raytracer/geometry/spatial_vector.hpp"
 
-#include "raytracer/value_mapping.hpp"
+#include "raytracer/value_map.hpp"
 
 namespace raytracer
 {
@@ -46,10 +46,10 @@ namespace raytracer
 				// The current ray's origin is always associated with the current row and column scanned.
 				const geometry::ray ray
 				{
-					geometry::point { vector_type( row ), vector_type( column ), vector_type() },
-					geometry::spatial_vector { vector_type(), vector_type(), vector_type( 1 ) }
+					geometry::point { geometry::point::value_type( row ), geometry::point::value_type( column ), geometry::point::value_type() },
+					geometry::spatial_vector { geometry::spatial_vector::value_type(), geometry::spatial_vector::value_type(), geometry::spatial_vector::value_type( 1 ) }
 				};
-				
+
 				// Compute the intersection of the ray for every object in the scene. The trace algorithm does not
 				// currently support multiple intersecting objects and performs early exit on the first object
 				// intersected.
@@ -108,8 +108,8 @@ namespace raytracer
 						// be projected by another light source.
 						const auto value =
 							std::accumulate(
-								std::begin( projections ),
-								std::end( projections ),
+								std::cbegin( projections ),
+								std::cend( projections ),
 								vector_type(),
 								[]( const auto& first, const auto& second )
 								{
@@ -120,7 +120,7 @@ namespace raytracer
 						// a value linearly proportional to the intensity value. At peak intensity, the pixel reflects
 						// the object's maximal color value. This color value decreases (darkens) proportionally to the
 						// computed intensity. No color is mapped for negative intensity values, resulting in a black pixel.
-						elements[row][column] = value_mapping::color_map( object->get_color(), value );
+						elements[row][column] = value_map::color( object->get_color(), value );
 
 						break;
 					}

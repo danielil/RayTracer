@@ -18,7 +18,7 @@ Features
 
 Usage
 ------------------
-	./RayTracer --scene path_to_scene.json --output output_filename
+	./RayTracer --scene path_to_scene.json
 	./RayTracer --help
 
 Requirements
@@ -52,6 +52,10 @@ Dependencies
     <td>Scene (JSON) Parsing</td>
     <td>Boost.PropertyTree</td>
   </tr>
+  <tr>
+    <td>Window</td>
+    <td>SFML</td>
+  </tr>
 </table>
 
 Screenshot
@@ -71,7 +75,6 @@ Limitations/ToDo
   <li>Add material support in addition to object color. Make color derived from material rather than object and specify material color reflectance efficiency.</li>
   <li>Refactor the OpenMP usage with the C++17 execution policies (http://en.cppreference.com/w/cpp/algorithm/execution_policy_tag_t) when they become available.</li>
   <li>Proper matrix/tensor/multidimensional container allocated contiguously and indexed linearly. The current matrix class uses two levels of pointer indirection. That is, it contains a collection of nested containers of heap allocated data. As a result, the buffer is not contiguous in memory and destroys the cache line.</li>
-  <li>QT-based GUI</li>
 </ul>
 
 Technical Pseucode (Basic)

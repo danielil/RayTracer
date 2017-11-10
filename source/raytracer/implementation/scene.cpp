@@ -30,7 +30,7 @@ namespace raytracer
 {
 	scene::scene( const std::string filename )
 	{
-		boost::property_tree::json_parser::read_json( filename, this->property_tree );
+		read_json( filename, this->property_tree );
 
 		this->parse_root();
 	}

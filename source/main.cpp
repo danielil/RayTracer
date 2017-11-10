@@ -25,23 +25,23 @@
 #include "raytracer/raytracer.hpp"
 
 #include "utility/timer.hpp"
-#include "utility/netpbm.hpp"
 
 #include <boost/program_options.hpp>
 
+#include <SFML/Graphics.hpp>
+
 #include <iostream>
 
-int main( int argc, char** argv )
+int main( const int argc, char** argv )
 {
 	boost::program_options::options_description description( "Allowed options" );
 	description.add_options()
 		( "help", "List all available arguments" )
-		( "scene", boost::program_options::value< std::string >(), "Path to scene file" )
-		( "output", boost::program_options::value< std::string >(), "Output filename" );
+		( "scene", boost::program_options::value< std::string >(), "Path to scene file" );
 
 	boost::program_options::variables_map variables_map;
-	boost::program_options::store( boost::program_options::parse_command_line( argc, argv, description ), variables_map );
-	boost::program_options::notify( variables_map );
+	store( parse_command_line( argc, argv, description ), variables_map );
+	notify( variables_map );
 
 	if ( variables_map.count( "help" ) )
 	{
@@ -53,7 +53,7 @@ int main( int argc, char** argv )
 	if ( variables_map.count( "scene" ) )
 	{
 		std::cout << "Scene file was set to "
-			<< variables_map["scene"].as< std::string >() << "." << std::endl;
+			<< variables_map["scene"].as< std::string >() << std::endl;
 	}
 	else
 	{
@@ -62,33 +62,60 @@ int main( int argc, char** argv )
 		return EXIT_FAILURE;
 	}
 
-	if ( variables_map.count( "output" ) )
-	{
-		std::cout << "Output filename was set to "
-			<< variables_map["output"].as< std::string >() << "." << std::endl;
-	}
-	else
-	{
-		std::cout << "Output filename was not specified." << std::endl;
-
-		return EXIT_FAILURE;
-	}
-
 	raytracer::scene scene( variables_map["scene"].as< std::string >() );
 
 	const auto& metadata = scene.get_metadata();
 
-	std::cout << utility::get_timed_callback< std::chrono::milliseconds >( [&variables_map, &scene, &metadata]()
+	raytracer::render::container_type trace(0, 0);
+
+	std::cout << utility::get_timed_callback< std::chrono::milliseconds >( [&variables_map, &scene, &metadata, &trace]()
 	{
-		utility::netpbm(
-			variables_map["output"].as< std::string >(),
-			utility::netpbm::format::ppm,
-			utility::netpbm::encoding::ascii,
-			metadata.rows,
-			metadata.columns ).write(
-				raytracer::render().trace(
-					scene ) );
-	} ).count() << " ticks";
+		trace = raytracer::render().trace( scene );
+	} ).count() << " milliseconds";
+
+	const auto depths = 4;
+	std::vector< sf::Uint8 > pixels( metadata.columns * metadata.rows * depths );
+
+	for ( raytracer::metadata::size_type row = 0; row < metadata.rows; ++row )
+	{
+		for ( raytracer::metadata::size_type column = 0; column < metadata.columns; ++column )
+		{
+			const auto row_column_offset = row * metadata.columns + column;
+
+			for ( image::rgb_container::value_type depth = 0; depth < depths; ++depth )
+			{
+				const auto pixel_offset = row_column_offset * depths + depth;
+
+				pixels[pixel_offset] = ( depth == depths - 1 ) ? image::MAX_CHANNEL_VALUE : trace[row][column][depth];
+			}
+		}
+	}
+
+	sf::Texture texture;
+	if (texture.create( int(metadata.columns), int(metadata.rows) ) )
+	{
+		texture.update( pixels.data() );
+		texture.setSmooth( true );
+
+		const sf::Sprite sprite( texture );
+
+		sf::RenderWindow window( sf::VideoMode( int(metadata.columns), int(metadata.rows) ), "RayTracer" );
+		while ( window.isOpen() )
+		{
+			sf::Event event;
+			while ( window.pollEvent( event ) )
+			{
+				window.clear( sf::Color::Black );
+				window.draw( sprite );
+				window.display();
+
+				if ( event.type == sf::Event::Closed )
+				{
+					window.close();
+				}
+			}
+		}
+	}
 
 	return EXIT_SUCCESS;
 }

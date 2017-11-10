@@ -21,26 +21,24 @@
  * SOFTWARE.
  */
 
-#include "utility/netpbm.hpp"
+#include "raytracer/value_map.hpp"
 
-namespace utility
+#include <algorithm>
+
+namespace raytracer::value_map
 {
-	netpbm::netpbm(
-		const std::string filename,
-		const format format,
-		const encoding encoding,
-		const std::size_t rows,
-		const std::size_t columns )
+	image::rgb_container color(
+		image::rgb_container color,
+		const vector_type projection_value )
 	{
-		this->output = std::ofstream( filename + "." + this->format_to_string.at( format ) );
-		const auto magic_number = this->format_to_magic_number.at( format ).at( encoding );
+		static constexpr auto min = static_cast< vector_type >( image::MIN_CHANNEL_VALUE );
+		static constexpr auto max = static_cast< vector_type >( image::MAX_CHANNEL_VALUE );
 
-		this->output << "P" << magic_number << std::endl;
-		this->output << rows << " " << columns << std::endl;
-
-		if ( format != format::pbm )
+		for ( auto&& channel : color )
 		{
-			this->output << static_cast< textual_type >( image::MAX_CHANNEL_VALUE ) << std::endl;
+			channel = static_cast< image::channel_type >( std::clamp( channel * projection_value, min, max ) );
 		}
+
+		return color;
 	}
 }
