@@ -127,7 +127,7 @@ namespace raytracer::geometry::object
 		return normal;
 	}
 
-	const image::rgb_container& sphere::get_color() const
+	const image::rgba_container& sphere::get_channels() const
 	{
 		return this->channels;
 	}

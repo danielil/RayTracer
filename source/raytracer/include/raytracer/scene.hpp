@@ -24,8 +24,7 @@
 #pragma once
 
 #include "raytracer/metadata.hpp"
-#include "raytracer/geometry/point.hpp"
-#include "raytracer/geometry/object/object.hpp"
+#include "raytracer/element.hpp"
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -40,12 +39,6 @@ namespace raytracer
 	class scene
 	{
 	public:
-		// Container for the light sources.
-		using illumination_container = std::vector< geometry::point >;
-
-		// Container for the scene elements.
-		using object_container = std::vector< std::shared_ptr< geometry::object::object > >;
-
 		scene( const std::string filename );
 		~scene() noexcept = default;
 
@@ -56,8 +49,7 @@ namespace raytracer
 		scene& operator=( scene&& ) noexcept = delete;
 
 		const metadata& get_metadata() const;
-		const illumination_container& get_illuminations() const;
-		const object_container& get_objects() const;
+		const element& get_element() const;
 
 	private:
 		void parse_root();
@@ -86,7 +78,6 @@ namespace raytracer
 		boost::property_tree::ptree property_tree;
 
 		metadata metadata;
-		illumination_container illuminations;
-		object_container objects;
+		element element;
 	};
 }

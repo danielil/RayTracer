@@ -40,14 +40,9 @@ namespace raytracer
 		return this->metadata;
 	}
 
-	const scene::illumination_container& scene::get_illuminations() const
+	const element& scene::get_element() const
 	{
-		return this->illuminations;
-	}
-
-	const scene::object_container& scene::get_objects() const
-	{
-		return this->objects;
+		return this->element;
 	}
 
 	void scene::parse_root()
@@ -76,7 +71,7 @@ namespace raytracer
 		{
 			const auto point = parse_array< vector_type >( point_node.second.get_child( "point" ) );
 
-			this->illuminations.emplace_back( point.data(), point.size() );
+			this->element.illuminations.emplace_back( point.data(), point.size() );
 		}
 	}
 
@@ -93,15 +88,15 @@ namespace raytracer
 			const auto radius = sphere.second.get< vector_type >( "radius" );
 			const auto color = parse_array< image::channel_type >( sphere.second.get_child( "color" ) );
 
-			image::rgb_container rgb_container;
+			image::rgba_container rgba_container;
 
-			std::copy( std::cbegin( color ), std::cend( color ), std::begin( rgb_container ) );
+			std::copy( std::cbegin( color ), std::cend( color ), std::begin( rgba_container ) );
 
-			this->objects.emplace_back(
+			this->element.objects.emplace_back(
 				std::make_shared< geometry::object::sphere >(
 					geometry::point( point.data(), point.size() ),
 					radius,
-					rgb_container ) );
+					rgba_container ) );
 		}
 	}
 }

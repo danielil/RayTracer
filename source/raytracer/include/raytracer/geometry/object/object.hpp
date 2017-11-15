@@ -51,6 +51,6 @@ namespace raytracer::geometry::object
 		/*
 		 * Returns the object's color.
 		 */
-		virtual const image::rgb_container& get_color() const = 0;
+		virtual const image::rgba_container& get_channels() const = 0;
 	};
 }

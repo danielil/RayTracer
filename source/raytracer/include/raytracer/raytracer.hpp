@@ -35,9 +35,6 @@ namespace raytracer
 	class render
 	{
 	public:
-		// Container for the representation of the output.
-		using container_type = image::rgb_image;
-
 		render() = default;
 		~render() noexcept = default;
 
@@ -50,6 +47,12 @@ namespace raytracer
 		/**
 		 * Generates the traced output.
 		 */
-		container_type trace( const scene& scene );
+		image::rgba_image trace( const scene& scene );
+
+	private:
+		image::rgba_container trace(
+			const metadata::size_type row,
+			const metadata::size_type column,
+			const element& element );
 	};
 }

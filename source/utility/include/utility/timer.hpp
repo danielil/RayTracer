@@ -31,7 +31,7 @@ namespace utility
 	/**
 	 * Returns a time inverval representing the callback's execution time.
 	 */
-	template < typename Duration >
+	template< typename Duration >
 	Duration get_timed_callback( std::function< void() >&& callback )
 	{
 		using clock_type = std::chrono::high_resolution_clock;

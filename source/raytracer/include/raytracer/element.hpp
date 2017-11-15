@@ -23,24 +23,26 @@
 
 #pragma once
 
-#define NOMINMAX
+#include "geometry/point.hpp"
+#include "geometry/object/object.hpp"
 
-#include <eigen3/unsupported/Eigen/CXX11/Tensor>
+#include <vector>
+#include <memory>
 
-#include <array>
-
-namespace image
+namespace raytracer
 {
-	using channel_type = std::uint8_t;
+	/**
+	 * Structure containing information about scene elements.
+	 */
+	struct element
+	{
+		// Container for the light sources.
+		using illumination_container = std::vector< geometry::point >;
 
-	static constexpr auto MIN_CHANNEL_VALUE = std::numeric_limits< channel_type >::min();
-	static constexpr auto MAX_CHANNEL_VALUE = std::numeric_limits< channel_type >::max();
+		// Container for the scene elements.
+		using object_container = std::vector< std::shared_ptr< geometry::object::object > >;
 
-	template< typename T, const std::size_t N >
-	using image = Eigen::Tensor< T, N, Eigen::RowMajor >;
-
-	static constexpr auto RGBA_CHANNELS = 4U;
-
-	using rgba_container = std::array< channel_type, RGBA_CHANNELS >;
-	using rgba_image = image< rgba_container::value_type, 3U >;
+		illumination_container illuminations;
+		object_container objects;
+	};
 }

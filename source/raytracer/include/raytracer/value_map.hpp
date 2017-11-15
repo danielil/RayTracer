@@ -36,7 +36,7 @@ namespace raytracer::value_map
 	 * between projection values and color, as every channel is multiplied
 	 * by the same projection value.
 	 */
-	image::rgb_container color(
-		image::rgb_container channels,
+	image::rgba_container color(
+		image::rgba_container channels,
 		vector_type projection_value );
 }

@@ -27,8 +27,8 @@
 
 namespace raytracer::value_map
 {
-	image::rgb_container color(
-		image::rgb_container color,
+	image::rgba_container color(
+		image::rgba_container color,
 		const vector_type projection_value )
 	{
 		static constexpr auto min = static_cast< vector_type >( image::MIN_CHANNEL_VALUE );

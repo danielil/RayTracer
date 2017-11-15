@@ -52,8 +52,9 @@ int main( const int argc, char** argv )
 
 	if ( variables_map.count( "scene" ) )
 	{
-		std::cout << "Scene file was set to "
-			<< variables_map["scene"].as< std::string >() << std::endl;
+		const auto& value = variables_map["scene"].as< std::string >();
+
+		std::cout << "Scene file was set to " << value << std::endl;
 	}
 	else
 	{
@@ -64,42 +65,22 @@ int main( const int argc, char** argv )
 
 	raytracer::scene scene( variables_map["scene"].as< std::string >() );
 
+	sf::Texture texture;
+
 	const auto& metadata = scene.get_metadata();
 
-	raytracer::render::container_type trace(0, 0);
-
-	std::cout << utility::get_timed_callback< std::chrono::milliseconds >( [&variables_map, &scene, &metadata, &trace]()
+	if ( texture.create( int( metadata.columns ), int( metadata.rows ) ) )
 	{
-		trace = raytracer::render().trace( scene );
-	} ).count() << " milliseconds";
-
-	const auto depths = 4;
-	std::vector< sf::Uint8 > pixels( metadata.columns * metadata.rows * depths );
-
-	for ( raytracer::metadata::size_type row = 0; row < metadata.rows; ++row )
-	{
-		for ( raytracer::metadata::size_type column = 0; column < metadata.columns; ++column )
+		std::cout << utility::get_timed_callback< std::chrono::milliseconds >([&texture, &scene]()
 		{
-			const auto row_column_offset = row * metadata.columns + column;
+			texture.update( raytracer::render().trace( scene ).data() );
+		}).count() << " milliseconds";
 
-			for ( image::rgb_container::value_type depth = 0; depth < depths; ++depth )
-			{
-				const auto pixel_offset = row_column_offset * depths + depth;
-
-				pixels[pixel_offset] = ( depth == depths - 1 ) ? image::MAX_CHANNEL_VALUE : trace[row][column][depth];
-			}
-		}
-	}
-
-	sf::Texture texture;
-	if (texture.create( int(metadata.columns), int(metadata.rows) ) )
-	{
-		texture.update( pixels.data() );
 		texture.setSmooth( true );
 
 		const sf::Sprite sprite( texture );
 
-		sf::RenderWindow window( sf::VideoMode( int(metadata.columns), int(metadata.rows) ), "RayTracer" );
+		sf::RenderWindow window( sf::VideoMode::getDesktopMode(), "RayTracer", sf::Style::Fullscreen );
 		while ( window.isOpen() )
 		{
 			sf::Event event;
@@ -109,7 +90,7 @@ int main( const int argc, char** argv )
 				window.draw( sprite );
 				window.display();
 
-				if ( event.type == sf::Event::Closed )
+				if ( event.type == sf::Event::KeyPressed )
 				{
 					window.close();
 				}
