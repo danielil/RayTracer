@@ -32,33 +32,32 @@ namespace raytracer
 {
 	image::rgba_image render::trace( const scene& scene )
 	{
-		const auto metadata = scene.get_metadata();
+		const auto& metadata = scene.get_metadata();
+		const auto& elements = scene.get_elements();
 
-		image::rgba_image elements( metadata.rows, metadata.columns, image::RGBA_CHANNELS );
+		image::rgba_image traces( metadata.rows, metadata.columns, image::RGBA_CHANNELS );
 
-		// TODO: Use metadata::size_type instead of int
-		// Signed type required for OpenMP version bundled with MSVC.
 		#pragma omp parallel for
-		for ( auto row = 0; row < static_cast< int >( metadata.rows ); ++row )
+		for ( metadata::size_type row = 0; row < metadata.rows; ++row )
 		{
 			for ( metadata::size_type column = 0; column < metadata.columns; ++column )
 			{
-				const auto& channels = this->trace( row, column, scene.get_element() );
+				const auto& channels = this->trace( row, column, elements );
 
-				for ( auto channel = 0; channel < channels.size(); ++channel )
+				for ( image::rgba_container::value_type channel = 0; channel < channels.size(); ++channel )
 				{
-					elements( row, column, channel ) = channels[channel];
+					traces( row, column, channel ) = channels[channel];
 				}
 			}
 		}
 
-		return elements;
+		return traces;
 	}
 
 	image::rgba_container render::trace(
 		const metadata::size_type row,
 		const metadata::size_type column,
-		const element& element )
+		const elements& element )
 	{
 		// The current ray's origin is always associated with the current row and column scanned.
 		const geometry::ray ray
@@ -137,7 +136,7 @@ namespace raytracer
 				// a value linearly proportional to the intensity value. At peak intensity, the pixel reflects
 				// the object's maximal color value. This color value decreases (darkens) proportionally to the
 				// computed intensity. No color is mapped for negative intensity values, resulting in a black pixel.
-				return value_map::color( object->get_channels(), value );
+				return value_map::channels( object->get_channels(), value );
 			}
 		}
 

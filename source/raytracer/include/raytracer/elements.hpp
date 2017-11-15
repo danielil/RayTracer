@@ -34,7 +34,7 @@ namespace raytracer
 	/**
 	 * Structure containing information about scene elements.
 	 */
-	struct element
+	struct elements
 	{
 		// Container for the light sources.
 		using illumination_container = std::vector< geometry::point >;

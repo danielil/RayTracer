@@ -24,7 +24,7 @@
 #pragma once
 
 #include "raytracer/metadata.hpp"
-#include "raytracer/element.hpp"
+#include "raytracer/elements.hpp"
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -49,7 +49,7 @@ namespace raytracer
 		scene& operator=( scene&& ) noexcept = delete;
 
 		const metadata& get_metadata() const;
-		const element& get_element() const;
+		const elements& get_elements() const;
 
 	private:
 		void parse_root();
@@ -78,6 +78,6 @@ namespace raytracer
 		boost::property_tree::ptree property_tree;
 
 		metadata metadata;
-		element element;
+		elements elements;
 	};
 }

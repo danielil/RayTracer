@@ -36,10 +36,12 @@ namespace image
 	static constexpr auto MIN_CHANNEL_VALUE = std::numeric_limits< channel_type >::min();
 	static constexpr auto MAX_CHANNEL_VALUE = std::numeric_limits< channel_type >::max();
 
-	template< typename T, const std::size_t N >
-	using image = Eigen::Tensor< T, N, Eigen::RowMajor >;
+	using tensor_size_type = std::size_t;
 
-	static constexpr auto RGBA_CHANNELS = 4U;
+	template< typename T, const std::size_t N >
+	using image = Eigen::Tensor< T, N, Eigen::RowMajor, tensor_size_type >;
+
+	static constexpr tensor_size_type RGBA_CHANNELS = 4U;
 
 	using rgba_container = std::array< channel_type, RGBA_CHANNELS >;
 	using rgba_image = image< rgba_container::value_type, 3U >;

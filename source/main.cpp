@@ -55,47 +55,45 @@ int main( const int argc, char** argv )
 		const auto& value = variables_map["scene"].as< std::string >();
 
 		std::cout << "Scene file was set to " << value << std::endl;
+
+		raytracer::scene scene( value );
+		const auto& metadata = scene.get_metadata();
+
+		sf::Texture texture;
+		if ( texture.create( int( metadata.columns ), int( metadata.rows ) ) )
+		{
+			std::cout << utility::get_timed_callback< std::chrono::milliseconds >([&texture, &scene]()
+			{
+				texture.update( raytracer::render().trace( scene ).data() );
+			}).count() << " milliseconds";
+
+			texture.setSmooth( true );
+
+			const sf::Sprite sprite( texture );
+
+			sf::RenderWindow window( sf::VideoMode::getDesktopMode(), "RayTracer", sf::Style::Fullscreen );
+			while ( window.isOpen() )
+			{
+				sf::Event event;
+				while ( window.pollEvent( event ) )
+				{
+					window.clear( sf::Color::Black );
+					window.draw( sprite );
+					window.display();
+
+					if ( event.type == sf::Event::KeyPressed )
+					{
+						window.close();
+					}
+				}
+			}
+		}
 	}
 	else
 	{
 		std::cout << "Scene file was not specified." << std::endl;
 
 		return EXIT_FAILURE;
-	}
-
-	raytracer::scene scene( variables_map["scene"].as< std::string >() );
-
-	sf::Texture texture;
-
-	const auto& metadata = scene.get_metadata();
-
-	if ( texture.create( int( metadata.columns ), int( metadata.rows ) ) )
-	{
-		std::cout << utility::get_timed_callback< std::chrono::milliseconds >([&texture, &scene]()
-		{
-			texture.update( raytracer::render().trace( scene ).data() );
-		}).count() << " milliseconds";
-
-		texture.setSmooth( true );
-
-		const sf::Sprite sprite( texture );
-
-		sf::RenderWindow window( sf::VideoMode::getDesktopMode(), "RayTracer", sf::Style::Fullscreen );
-		while ( window.isOpen() )
-		{
-			sf::Event event;
-			while ( window.pollEvent( event ) )
-			{
-				window.clear( sf::Color::Black );
-				window.draw( sprite );
-				window.display();
-
-				if ( event.type == sf::Event::KeyPressed )
-				{
-					window.close();
-				}
-			}
-		}
 	}
 
 	return EXIT_SUCCESS;

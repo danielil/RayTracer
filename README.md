@@ -47,7 +47,7 @@ Dependencies
     <td>Boost.Test</td>
   </tr>
   <tr>
-    <td>Contiguously allocated tensor (2D and 3D)</td>
+    <td>Contiguously-allocated tensor (2D and 3D)</td>
     <td>Eigen</td>
   </tr>
   <tr>

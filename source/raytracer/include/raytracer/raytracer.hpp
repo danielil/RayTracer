@@ -53,6 +53,6 @@ namespace raytracer
 		image::rgba_container trace(
 			const metadata::size_type row,
 			const metadata::size_type column,
-			const element& element );
+			const elements& element );
 	};
 }
