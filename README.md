@@ -10,7 +10,7 @@ License: `MIT License (MIT), http://opensource.org/licenses/MIT`
 Features
 ------------------
 <ul>
-  <li>Basic multithreading support with OpenMP.</li>
+  <li>Basic multithreading support with std::thread.</li>
   <li>Basic color mapping given object intrinsic color.</li>
   <li>Supports multiple objects and multiple point light sources.</li>
   <li>Uses a scene file (JSON format) to dynamically render elements at runtime.</li>
@@ -33,10 +33,6 @@ Dependencies
   <tr>
     <th>Type</th>
     <th>Dependency</th>
-  </tr>
-  <tr>
-    <td>Parallelization</td>
-    <td>OpenMP</td>
   </tr>
   <tr>
     <td>Program Arguments</td>
@@ -75,7 +71,7 @@ Limitations/ToDo
 <ul>
   <li>Multiple object intersections is not supported. The RayTracer will simply render the first object intersected, even if there is an object behind it. This is a direct consequence of the RayTracer not being recursive. This should change in the near future.
   <li>Add material support in addition to object color. Make color derived from material rather than object and specify material color reflectance efficiency.</li>
-  <li>Refactor the OpenMP usage with the C++17 execution policies (http://en.cppreference.com/w/cpp/algorithm/execution_policy_tag_t) when they become available.</li>
+  <li>Refactor the std::thread usage with the C++17 execution policies (http://en.cppreference.com/w/cpp/algorithm/execution_policy_tag_t) when they become available.</li>
 </ul>
 
 Technical Pseucode (Basic)

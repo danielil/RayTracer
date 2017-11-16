@@ -28,6 +28,8 @@
 
 #include "raytracer/value_map.hpp"
 
+#include "concurrency/concurrency.hpp"
+
 namespace raytracer
 {
 	image::rgba_image render::trace( const scene& scene )
@@ -37,8 +39,7 @@ namespace raytracer
 
 		image::rgba_image traces( metadata.rows, metadata.columns, image::RGBA_CHANNELS );
 
-		#pragma omp parallel for
-		for ( metadata::size_type row = 0; row < metadata.rows; ++row )
+		concurrency::parallel_for< metadata::size_type >( 0, metadata.rows, [this, &metadata, &elements, &traces]( const auto& row )
 		{
 			for ( metadata::size_type column = 0; column < metadata.columns; ++column )
 			{
@@ -49,7 +50,7 @@ namespace raytracer
 					traces( row, column, channel ) = channels[channel];
 				}
 			}
-		}
+		} );
 
 		return traces;
 	}

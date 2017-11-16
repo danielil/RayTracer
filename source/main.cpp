@@ -46,11 +46,8 @@ int main( const int argc, char** argv )
 	if ( variables_map.count( "help" ) )
 	{
 		std::cout << description << std::endl;
-
-		return EXIT_SUCCESS;
 	}
-
-	if ( variables_map.count( "scene" ) )
+	else if ( variables_map.count( "scene" ) )
 	{
 		const auto& value = variables_map["scene"].as< std::string >();
 
@@ -62,12 +59,12 @@ int main( const int argc, char** argv )
 		sf::Texture texture;
 		if ( texture.create( int( metadata.columns ), int( metadata.rows ) ) )
 		{
+			texture.setSmooth( true );
+
 			std::cout << utility::get_timed_callback< std::chrono::milliseconds >([&texture, &scene]()
 			{
 				texture.update( raytracer::render().trace( scene ).data() );
 			}).count() << " milliseconds";
-
-			texture.setSmooth( true );
 
 			const sf::Sprite sprite( texture );
 
