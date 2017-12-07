@@ -19,10 +19,10 @@ Features
 Usage
 ------------------
 	./RayTracer --help
-  ./RayTracer --scene path_to_scene.json
-  ./RayTracer --scene path_to_scene.json --output-to-window
-  ./RayTracer --scene path_to_scene.json --output_to_file output.[bmp, png, tga, jpg]
-  ./RayTracer --scene path_to_scene.json --output-to-window --output_to_file output.[bmp, png, tga, jpg]
+	./RayTracer --scene path_to_scene.json
+	./RayTracer --scene path_to_scene.json --output-to-window
+	./RayTracer --scene path_to_scene.json --output_to_file output.[bmp, png, tga, jpg]
+	./RayTracer --scene path_to_scene.json --output-to-window --output_to_file output.[bmp, png, tga, jpg]
 
   The image can be projected to a fullscreen window, an output file, or both. Pressing any key will close the window.
 
