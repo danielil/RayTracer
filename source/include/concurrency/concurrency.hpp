@@ -27,13 +27,15 @@
 #include <functional>
 
 #include <queue>
-#include <list>
+#include <vector>
 
 namespace concurrency
 {
 	class scoped_thread
 	{
 	public:
+		scoped_thread() = default;
+
 		template<
 			typename Function,
 			typename... Arguments >
@@ -46,7 +48,7 @@ namespace concurrency
 		{
 		}
 
-		~scoped_thread()
+		~scoped_thread() noexcept
 		{
 			if ( this->thread.joinable() )
 			{
@@ -55,10 +57,10 @@ namespace concurrency
 		}
 
 		scoped_thread( const scoped_thread& ) = default;
-		scoped_thread( scoped_thread&& ) = default;
+		scoped_thread( scoped_thread&& ) noexcept = default;
 
 		scoped_thread& operator=( const scoped_thread& ) = default;
-		scoped_thread& operator=( scoped_thread&& ) = default;
+		scoped_thread& operator=( scoped_thread&& ) noexcept = default;
 
 	private:
 		std::thread thread;
@@ -72,16 +74,17 @@ namespace concurrency
 		const std::size_t thread_count = std::thread::hardware_concurrency(),
 		const std::size_t threshold = 1 )
 	{
-		const auto bucket =
+		const auto buckets =
 			std::max(
 				threshold,
 				( end - begin ) / thread_count );
 
-		std::queue< scoped_thread, std::list< scoped_thread > > threads;
+		using thread_storage = std::vector< scoped_thread >;
+		std::queue< thread_storage::value_type, thread_storage > threads{ thread_storage( buckets ) };
 
-		for ( auto it = begin; it < end; it += bucket )
+		for ( auto it = begin; it < end; it += buckets )
 		{
-			const auto last = std::min( it + bucket, end );
+			const auto last = std::min( it + buckets, end );
 
 			threads.emplace(
 				[it, last, &callback]()

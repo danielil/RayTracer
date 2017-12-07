@@ -26,5 +26,5 @@
 namespace raytracer
 {
 	// Type for use as underlying render values.
-	using vector_type = float;
+	using vector_type = double;
 }

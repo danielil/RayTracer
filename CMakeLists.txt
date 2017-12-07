@@ -20,8 +20,7 @@ add_executable(
 set(
 	INCLUDE_HEADERS
 	${SOURCE_DIRECTORY}/include
-	${SOURCE_DIRECTORY}/raytracer/include
-	${SOURCE_DIRECTORY}/utility/include )
+	${SOURCE_DIRECTORY}/raytracer/include )
 target_include_directories(
 	${EXECUTABLE_NAME}
 	PRIVATE

@@ -36,12 +36,25 @@ int main( const int argc, char** argv )
 {
 	boost::program_options::options_description description( "Allowed options" );
 	description.add_options()
-		( "help", "List all available arguments" )
-		( "scene", boost::program_options::value< std::string >(), "Path to scene file" );
+		( "help", "List all available arguments." )
+		( "scene", boost::program_options::value< std::string >(), "Specify the path to the scene file." )
+		( "output-to-window", "Project the output to a window." )
+		( "output-to-file", boost::program_options::value< std::string >(),
+			"Project the output to a file. Specify the filename and extension. Supported extensions include .bmp, .png, .tga, and .jpg." );
 
 	boost::program_options::variables_map variables_map;
-	store( parse_command_line( argc, argv, description ), variables_map );
-	notify( variables_map );
+
+	try
+	{
+		store( parse_command_line( argc, argv, description ), variables_map );
+		notify( variables_map );
+	}
+	catch ( const boost::program_options::error& error )
+	{
+		std::cout << error.what() << std::endl;
+
+		return EXIT_FAILURE;
+	}
 
 	if ( variables_map.count( "help" ) )
 	{
@@ -49,40 +62,63 @@ int main( const int argc, char** argv )
 	}
 	else if ( variables_map.count( "scene" ) )
 	{
-		const auto& value = variables_map["scene"].as< std::string >();
+		const auto& scene_value = variables_map["scene"].as< std::string >();
 
-		std::cout << "Scene file was set to " << value << std::endl;
+		std::cout << "Scene file set to " << scene_value << std::endl;
 
-		raytracer::scene scene( value );
+		raytracer::scene scene( scene_value );
 		const auto& metadata = scene.get_metadata();
 
 		sf::Texture texture;
 		if ( texture.create( int( metadata.columns ), int( metadata.rows ) ) )
 		{
 			texture.setSmooth( true );
-
-			std::cout << utility::get_timed_callback< std::chrono::milliseconds >([&texture, &scene]()
+			
+			// Minimalistic time-based benchmark
+			std::cout << utility::get_timed_callback< std::chrono::milliseconds >( [&texture, &scene]()
 			{
 				texture.update( raytracer::render().trace( scene ).data() );
-			}).count() << " milliseconds";
+			} ).count() << " milliseconds" << std::endl;
 
-			const sf::Sprite sprite( texture );
-
-			sf::RenderWindow window( sf::VideoMode::getDesktopMode(), "RayTracer", sf::Style::Fullscreen );
-			while ( window.isOpen() )
+			if ( variables_map.count( "output-to-window" ) )
 			{
-				sf::Event event;
-				while ( window.pollEvent( event ) )
-				{
-					window.clear( sf::Color::Black );
-					window.draw( sprite );
-					window.display();
+				std::cout << "Output will be projected to a window." << std::endl;
 
-					if ( event.type == sf::Event::KeyPressed )
+				const sf::Sprite sprite( texture );
+
+				sf::RenderWindow window( sf::VideoMode::getDesktopMode(), "RayTracer", sf::Style::Fullscreen );
+				while ( window.isOpen() )
+				{
+					sf::Event event;
+					while ( window.pollEvent( event ) )
 					{
-						window.close();
+						window.clear( sf::Color::Black );
+						window.draw( sprite );
+						window.display();
+
+						if ( event.type == sf::Event::KeyPressed )
+						{
+							window.close();
+						}
 					}
 				}
+			}
+			else
+			{
+				std::cout << "Output will not be projected to a window." << std::endl;
+			}
+
+			if ( variables_map.count( "output-to-file" ) )
+			{
+				const auto& output_filename = variables_map["output-to-file"].as< std::string >();
+				
+				std::cout << "Output will be projected to a file. Filename set to " << output_filename << std::endl;
+
+				texture.copyToImage().saveToFile( output_filename );
+			}
+			else
+			{
+				std::cout << "Output will not be projected to a file." << std::endl;
 			}
 		}
 	}
