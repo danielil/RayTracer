@@ -14,7 +14,8 @@ add_executable(
 	${SOURCE_DIRECTORY}/raytracer/implementation/scene.cpp
 	${SOURCE_DIRECTORY}/raytracer/implementation/raytracer.cpp
 	${SOURCE_DIRECTORY}/raytracer/implementation/value_map.cpp
-	${SOURCE_DIRECTORY}/raytracer/implementation/geometry/object/sphere.cpp )
+	${SOURCE_DIRECTORY}/raytracer/implementation/geometry/object/sphere.cpp
+	${SOURCE_DIRECTORY}/raytracer/implementation/geometry/object/triangle.cpp )
 
 # Include the source headers
 set(

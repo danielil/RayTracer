@@ -32,12 +32,12 @@
 
 namespace raytracer
 {
-	image::rgba_image render::trace( const scene& scene )
+	image::image render::trace( const scene& scene )
 	{
 		const auto& metadata = scene.get_metadata();
 		const auto& elements = scene.get_elements();
 
-		image::rgba_image traces( metadata.rows, metadata.columns, image::RGBA_CHANNELS );
+		image::image traces( metadata.rows, metadata.columns, image::CHANNELS );
 
 		concurrency::parallel_for< metadata::size_type >( 0, metadata.rows, [this, &metadata, &elements, &traces]( const auto& row )
 		{
@@ -45,7 +45,7 @@ namespace raytracer
 			{
 				const auto& channels = this->trace( row, column, elements );
 
-				for ( image::rgba_container::value_type channel = 0; channel < channels.size(); ++channel )
+				for ( image::channels::size_type channel = 0; channel < channels.size(); ++channel )
 				{
 					traces( row, column, channel ) = channels[channel];
 				}
@@ -55,7 +55,7 @@ namespace raytracer
 		return traces;
 	}
 
-	image::rgba_container render::trace(
+	image::channels render::trace(
 		const metadata::size_type row,
 		const metadata::size_type column,
 		const elements& element )
@@ -133,6 +133,6 @@ namespace raytracer
 			}
 		}
 
-		return { image::MIN_CHANNEL_VALUE, image::MIN_CHANNEL_VALUE, image::MIN_CHANNEL_VALUE, image::MIN_CHANNEL_VALUE };
+		return { image::MIN_CHANNEL_VALUE, image::MIN_CHANNEL_VALUE, image::MIN_CHANNEL_VALUE };
 	}
 }

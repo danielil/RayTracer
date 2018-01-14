@@ -47,10 +47,10 @@ namespace raytracer
 		/**
 		 * Generates the traced output.
 		 */
-		image::rgba_image trace( const scene& scene );
+		image::image trace( const scene& scene );
 
 	private:
-		image::rgba_container trace(
+		image::channels trace(
 			const metadata::size_type row,
 			const metadata::size_type column,
 			const elements& element );

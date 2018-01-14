@@ -70,7 +70,7 @@ int main( const int argc, char** argv )
 		const auto& metadata = scene.get_metadata();
 
 		sf::Texture texture;
-		if ( texture.create( int( metadata.columns ), int( metadata.rows ) ) )
+		if ( texture.create( unsigned( metadata.columns ), unsigned( metadata.rows ) ) )
 		{
 			texture.setSmooth( true );
 			

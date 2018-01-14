@@ -21,6 +21,8 @@
  * SOFTWARE.
  */
 
+#pragma once
+
 #include <algorithm>
 #include <thread>
 #include <utility>

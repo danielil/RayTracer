@@ -31,18 +31,25 @@
 
 namespace image
 {
+	// The base type of a channel value.
 	using channel_type = std::uint8_t;
 
+	// The lowest value a channel can hold.
 	static constexpr auto MIN_CHANNEL_VALUE = std::numeric_limits< channel_type >::min();
+
+	// The greatest value a channel can hold.
 	static constexpr auto MAX_CHANNEL_VALUE = std::numeric_limits< channel_type >::max();
 
+	// The type of the value using for indexing a tensor.
 	using tensor_size_type = std::size_t;
 
-	template< typename T, const std::size_t N >
-	using image = Eigen::Tensor< T, N, Eigen::RowMajor, tensor_size_type >;
+	// The number of image channels.
+	static constexpr tensor_size_type CHANNELS = 4U;
+	using channels = std::array< channel_type, CHANNELS >;
 
-	static constexpr tensor_size_type RGBA_CHANNELS = 4U;
+	// The order of the tensor.
+	static constexpr auto RANK = 3;
 
-	using rgba_container = std::array< channel_type, RGBA_CHANNELS >;
-	using rgba_image = image< rgba_container::value_type, 3U >;
+	// An image is a contiguously-allocated tensor of rank 3.
+	using image = Eigen::Tensor< channels::value_type, RANK, Eigen::RowMajor, tensor_size_type >;
 }

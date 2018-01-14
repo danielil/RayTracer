@@ -88,15 +88,15 @@ namespace raytracer
 			const auto radius = sphere.second.get< vector_type >( "radius" );
 			const auto color = parse_array< image::channel_type >( sphere.second.get_child( "color" ) );
 
-			image::rgba_container rgba_container;
+			image::channels channels;
 
-			std::copy( std::cbegin( color ), std::cend( color ), std::begin( rgba_container ) );
+			std::copy( std::cbegin( color ), std::cend( color ), std::begin( channels ) );
 
 			this->elements.objects.emplace_back(
 				std::make_shared< geometry::object::sphere >(
 					geometry::point( point.data(), point.size() ),
 					radius,
-					rgba_container ) );
+					channels ) );
 		}
 	}
 }

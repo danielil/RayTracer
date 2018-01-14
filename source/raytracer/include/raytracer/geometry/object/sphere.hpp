@@ -44,7 +44,7 @@ namespace raytracer::geometry::object
 		sphere(
 			Point&& center,
 			vector_type radius,
-			image::rgba_container channels ) :
+			image::channels channels ) :
 			center( std::forward< Point >( center ) ),
 			radius( radius ),
 			channels( channels )
@@ -65,11 +65,11 @@ namespace raytracer::geometry::object
 		/*
 		 * Returns the sphere's color.
 		 */
-		const image::rgba_container& get_channels() const override;
+		const image::channels& get_channels() const override;
 
 	private:
 		point center;
 		vector_type radius;
-		image::rgba_container channels;
+		image::channels channels;
 	};
 }

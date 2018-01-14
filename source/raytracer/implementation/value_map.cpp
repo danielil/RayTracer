@@ -27,17 +27,19 @@
 
 namespace raytracer::value_map
 {
-	image::rgba_container channels(
-		image::rgba_container channels,
+	image::channels channels(
+		image::channels channels,
 		const vector_type projection_value )
 	{
 		static constexpr auto min = static_cast< vector_type >( image::MIN_CHANNEL_VALUE );
 		static constexpr auto max = static_cast< vector_type >( image::MAX_CHANNEL_VALUE );
 
-		for ( image::rgba_container::size_type channel = 0; channel < channels.size() - 1; ++channel )
+		for ( image::channels::size_type channel = 0; channel < channels.size() - 1; ++channel )
 		{
 			channels[channel] = static_cast< image::channel_type >( std::clamp( channels[channel] * projection_value, min, max ) );
 		}
+		
+		channels[channels.size() - 1] = 255;
 
 		return channels;
 	}

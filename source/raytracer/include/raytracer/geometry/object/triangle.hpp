@@ -24,19 +24,50 @@
 #pragma once
 
 #include "raytracer/alias.hpp"
+#include "raytracer/geometry/ray.hpp"
+#include "raytracer/geometry/spatial_vector.hpp"
+#include "raytracer/geometry/object/object.hpp"
 
-#include "image/image.hpp"
+#include <optional>
 
-namespace raytracer::value_map
+namespace raytracer::geometry::object
 {
 	/**
-	 * Returns a color given an input color and a projection value.
-	 *
-	 * The color returned simply describes a linear relationship between
-	 * projection values and color, as every channel is multiplied by
-	 * the same projection value.
+	 * Defines a triangle.
 	 */
-	image::channels channels(
-		image::channels channels,
-		vector_type projection_value );
+	class triangle : public object
+	{
+	public:
+		~triangle() noexcept override = default;
+
+		template< typename Point >
+		triangle(
+			Point&& center,
+			vector_type radius,
+			image::channels channels ) :
+			center( std::forward< Point >( center ) ),
+			radius( radius ),
+			channels( channels )
+		{
+		}
+
+		/**
+		 */
+		std::optional< point > intersect( const ray& ray ) const override;
+
+		/**
+		 * Returns the normal vector of the triangle given an intersection point.
+		 */
+		spatial_vector normal( const point& intersection_point ) const override;
+
+		/*
+		 * Returns the triangle's color.
+		 */
+		const image::channels& get_channels() const override;
+
+	private:
+		point center;
+		vector_type radius;
+		image::channels channels;
+	};
 }

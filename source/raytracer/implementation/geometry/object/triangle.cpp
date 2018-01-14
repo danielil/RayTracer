@@ -21,22 +21,32 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "raytracer/geometry/object/triangle.hpp"
 
-#include "raytracer/alias.hpp"
-
-#include "image/image.hpp"
-
-namespace raytracer::value_map
+namespace raytracer::geometry::object
 {
-	/**
-	 * Returns a color given an input color and a projection value.
-	 *
-	 * The color returned simply describes a linear relationship between
-	 * projection values and color, as every channel is multiplied by
-	 * the same projection value.
-	 */
-	image::channels channels(
-		image::channels channels,
-		vector_type projection_value );
+	std::optional< point > triangle::intersect( const ray& ray ) const
+	{
+		// TODO
+
+		return {};
+	}
+
+	spatial_vector triangle::normal( const point& intersection_point ) const
+	{
+		// TODO
+
+		auto normal = intersection_point - center;
+
+		normalize( std::begin( normal ), std::end( normal ) );
+
+		return normal;
+	}
+
+	const image::channels& triangle::get_channels() const
+	{
+		// TODO
+		
+		return this->channels;
+	}
 }

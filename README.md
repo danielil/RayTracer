@@ -38,7 +38,7 @@ Dependencies
     <th>Dependency</th>
   </tr>
   <tr>
-    <td>Contiguously-allocated tensor (2D and 3D)</td>
+    <td>Contiguously-allocated tensor (rank 3)</td>
     <td>Eigen</td>
   </tr>
   <tr>
